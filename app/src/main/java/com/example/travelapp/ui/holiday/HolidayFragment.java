@@ -43,7 +43,7 @@ public class HolidayFragment extends Fragment {
 
         View root = inflater.inflate(R.layout.fragment_holiday, container, false);
 
-        RecyclerView recyclerView = (RecyclerView) root.findViewById(R.id.recyclerview);
+        RecyclerView recyclerView = root.findViewById(R.id.recyclerview);
         final HolidayListAdapter adapter = new HolidayListAdapter(getActivity());
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
