@@ -33,7 +33,7 @@ public class HolidayInputFragment extends Fragment {
     private EditText mEditHolidayView;
     private NavController navController;
     private TextView startDateText;
-    private TextView endDateText;
+//    private TextView endDateText;
 
     public HolidayInputFragment() {
         // Required empty public constructor
