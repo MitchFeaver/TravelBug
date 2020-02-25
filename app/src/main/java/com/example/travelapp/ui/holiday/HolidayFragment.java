@@ -3,6 +3,9 @@ package com.example.travelapp.ui.holiday;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -10,17 +13,24 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import androidx.navigation.NavDirections;
 
 import com.example.travelapp.R;
 import com.example.travelapp.ui.holiday.HolidayViewModel;
+import com.example.travelapp.ui.holidayInput.HolidayInputFragment;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
@@ -35,6 +45,28 @@ public class HolidayFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         navController = Navigation.findNavController(view);
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.menu_clear_data, menu);  // Use filter.xml from step 1
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if (id == R.id.action_clear) {
+            holidayViewModel.deleteAll();
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
@@ -68,8 +100,46 @@ public class HolidayFragment extends Fragment {
                 }
             }
         });
+
+        // Add the functionality to swipe items in the
+        // RecyclerView to delete the swiped item.
+        ItemTouchHelper helper = new ItemTouchHelper(
+                new ItemTouchHelper.SimpleCallback(0,
+                        ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
+                    @Override
+                    // We are not implementing onMove() in this app.
+                    public boolean onMove(RecyclerView recyclerView,
+                                          RecyclerView.ViewHolder viewHolder,
+                                          RecyclerView.ViewHolder target) {
+                        return false;
+                    }
+
+                    @Override
+                    // When the use swipes a holiday,
+                    // delete that holiday from the database.
+                    public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
+                        int position = viewHolder.getAdapterPosition();
+                        Holiday myHoliday = adapter.getHolidayAtPosition(position);
+                        Toast.makeText(getActivity(), "Deleting Holiday", Toast.LENGTH_SHORT).show();
+                        // Delete the holiday.
+                        holidayViewModel.deleteHoliday(myHoliday);
+                    }
+                });
+        // Attach the item touch helper to the recycler view.
+        helper.attachToRecyclerView(recyclerView);
+
+        adapter.setOnItemClickListener(new HolidayListAdapter.ClickListener() {
+
+            @Override
+            public void onItemClick(View v, int position) {
+                Holiday holiday = adapter.getHolidayAtPosition(position);
+                launchUpdateHolidayActivity(holiday);
+            }
+        });
         return root;
+    }
 
-
+    public void launchUpdateHolidayActivity(Holiday holiday) {
+//      Code for opening edit
     }
 }

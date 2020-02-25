@@ -28,6 +28,9 @@ import com.example.travelapp.ui.holiday.HolidayViewModel;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
+import java.text.DateFormat;
+import java.util.Calendar;
+
 
 /**
  * A simple {@link Fragment} subclass.
@@ -40,6 +43,7 @@ public class HolidayInputFragment extends Fragment implements DatePickerDialog.O
     private Button endDateButton;
     private TextView startDateText;
     private TextView endDateText;
+    private TextView holidayDesc;
 
     public HolidayInputFragment() {
         // Required empty public constructor
@@ -62,7 +66,7 @@ public class HolidayInputFragment extends Fragment implements DatePickerDialog.O
         startDateText = v.findViewById(R.id.startDateText);
         endDateButton = v.findViewById(R.id.endDateButton);
         endDateText = v.findViewById(R.id.endDateText);
-
+        holidayDesc = v.findViewById(R.id.notesText);
 
         FloatingActionButton fab = getActivity().findViewById(R.id.fab);
         fab.setImageResource (R.drawable.ic_save_black_24dp);
@@ -75,6 +79,7 @@ public class HolidayInputFragment extends Fragment implements DatePickerDialog.O
                                 .setAction(" Action ", null).show();
                     } else {
                         Holiday h = new Holiday(mEditHolidayView.getText().toString());
+//                        h.setHolidayDescription(holidayDesc.getText().toString());
                         mHolidayViewModel.insert(h);
                         NavDirections action =
                                 HolidayInputFragmentDirections.actionHolidayInputToNavHoliday();
@@ -115,6 +120,7 @@ public class HolidayInputFragment extends Fragment implements DatePickerDialog.O
         StringBuilder sb = new StringBuilder().append(dayOfMonth).append("/").append(monthOfYear + 1);
         String formattedDate = sb.toString();
         startDateText.setText(formattedDate);
+
     }
 
 

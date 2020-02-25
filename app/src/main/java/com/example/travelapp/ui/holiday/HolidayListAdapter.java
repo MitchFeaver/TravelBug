@@ -16,6 +16,7 @@ public class HolidayListAdapter extends RecyclerView.Adapter<HolidayListAdapter.
 
     private final LayoutInflater mInflater;
     private List<Holiday> mHolidays; // Cached copy of holidays
+    private static ClickListener clickListener;
 
     HolidayListAdapter(Context context) { mInflater = LayoutInflater.from(context); }
 
@@ -50,12 +51,30 @@ public class HolidayListAdapter extends RecyclerView.Adapter<HolidayListAdapter.
         else return 0;
     }
 
+    public Holiday getHolidayAtPosition(int position) {
+        return mHolidays.get(position);
+    }
+
     class HolidayViewHolder extends RecyclerView.ViewHolder {
         private final TextView holidayItemView;
 
         private HolidayViewHolder(View itemView) {
             super(itemView);
             holidayItemView = itemView.findViewById(R.id.textView);
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    clickListener.onItemClick(view, getAdapterPosition());
+                }
+            });
         }
+    }
+
+    public void setOnItemClickListener(ClickListener clickListener) {
+        HolidayListAdapter.clickListener = clickListener;
+    }
+
+    public interface ClickListener {
+        void onItemClick(View v, int position);
     }
 }

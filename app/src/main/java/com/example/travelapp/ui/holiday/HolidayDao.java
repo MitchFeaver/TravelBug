@@ -26,7 +26,7 @@ public interface HolidayDao {
     void deleteAll();
 
     @Delete
-    void deleteHoliday(Holiday word);
+    void deleteHoliday(Holiday holiday);
 
     @Query("SELECT * from holiday_table LIMIT 1")
     Holiday[] getAnyHoliday();
