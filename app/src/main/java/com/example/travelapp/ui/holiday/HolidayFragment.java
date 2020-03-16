@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -36,7 +37,9 @@ import com.google.android.material.snackbar.Snackbar;
 
 import java.util.List;
 
-public class HolidayFragment extends Fragment {
+import static android.content.ContentValues.TAG;
+
+public class HolidayFragment extends Fragment implements HolidayListAdapter.OnHolidayListener {
 
     private HolidayViewModel holidayViewModel;
     private NavController navController;
@@ -55,7 +58,7 @@ public class HolidayFragment extends Fragment {
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.menu_clear_data, menu);  // Use filter.xml from step 1
+        inflater.inflate(R.menu.menu_clear_data, menu);
     }
 
     @Override
@@ -76,7 +79,7 @@ public class HolidayFragment extends Fragment {
         View root = inflater.inflate(R.layout.fragment_holiday, container, false);
 
         RecyclerView recyclerView = root.findViewById(R.id.recyclerview);
-        final HolidayListAdapter adapter = new HolidayListAdapter(getActivity());
+        final HolidayListAdapter adapter = new HolidayListAdapter(getActivity(), this);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
@@ -113,7 +116,6 @@ public class HolidayFragment extends Fragment {
                                           RecyclerView.ViewHolder target) {
                         return false;
                     }
-
                     @Override
                     // When the use swipes a holiday,
                     // delete that holiday from the database.
@@ -127,19 +129,11 @@ public class HolidayFragment extends Fragment {
                 });
         // Attach the item touch helper to the recycler view.
         helper.attachToRecyclerView(recyclerView);
-
-        adapter.setOnItemClickListener(new HolidayListAdapter.ClickListener() {
-
-            @Override
-            public void onItemClick(View v, int position) {
-                Holiday holiday = adapter.getHolidayAtPosition(position);
-                launchUpdateHolidayActivity(holiday);
-            }
-        });
         return root;
     }
 
-    public void launchUpdateHolidayActivity(Holiday holiday) {
-//      Code for opening edit
+    @Override
+    public void onHolidayClick(int position) {
+        Log.i(TAG, "onClick: 2");
     }
 }

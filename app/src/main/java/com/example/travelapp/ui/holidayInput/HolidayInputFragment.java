@@ -14,6 +14,7 @@ import androidx.navigation.NavDirections;
 import androidx.navigation.Navigation;
 
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,6 +25,7 @@ import android.widget.TextView;
 
 import com.example.travelapp.R;
 import com.example.travelapp.ui.holiday.Holiday;
+import com.example.travelapp.ui.holiday.HolidayListAdapter;
 import com.example.travelapp.ui.holiday.HolidayViewModel;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
@@ -31,12 +33,12 @@ import com.google.android.material.snackbar.Snackbar;
 import java.text.DateFormat;
 import java.util.Calendar;
 
+import static android.content.ContentValues.TAG;
 
-/**
- * A simple {@link Fragment} subclass.
- */
+
 public class HolidayInputFragment extends Fragment implements DatePickerDialog.OnDateSetListener {
-    private HolidayViewModel mHolidayViewModel ;
+    private HolidayViewModel mHolidayViewModel;
+    private Holiday mHoliday;
     private EditText mEditHolidayView;
     private NavController navController;
     private Button startDateButton;
@@ -44,6 +46,8 @@ public class HolidayInputFragment extends Fragment implements DatePickerDialog.O
     private TextView startDateText;
     private TextView endDateText;
     private TextView holidayDesc;
+    private Boolean editHoliday = false;
+    private int holidayEditID;
 
     public HolidayInputFragment() {
         // Required empty public constructor
@@ -75,12 +79,21 @@ public class HolidayInputFragment extends Fragment implements DatePickerDialog.O
                 @Override
                 public void onClick(View view) {
                     if (TextUtils.isEmpty(mEditHolidayView.getText())) {
-                        Snackbar.make(view, " You need to enter a name", Snackbar.LENGTH_LONG)
-                                .setAction(" Action ", null).show();
-                    } else {
+                        Snackbar.make(view, "You need to enter a name", Snackbar.LENGTH_LONG)
+                                .setAction("Action ", null).show();
+                    } else if(!editHoliday){
                         Holiday h = new Holiday(mEditHolidayView.getText().toString());
-//                        h.setHolidayDescription(holidayDesc.getText().toString());
+                        h.setHolidayMemory(holidayDesc.getText().toString());
                         mHolidayViewModel.insert(h);
+                        NavDirections action =
+                                HolidayInputFragmentDirections.actionHolidayInputToNavHoliday();
+                        Navigation.findNavController(v).navigate(action);
+                    }else{
+                        Holiday holiday = new Holiday(mEditHolidayView.getText().toString());
+                        holiday.setHolidayMemory(holidayDesc.getText().toString());
+                        holiday.set_id(holidayEditID);
+                        mHolidayViewModel.update(holiday);
+
                         NavDirections action =
                                 HolidayInputFragmentDirections.actionHolidayInputToNavHoliday();
                         Navigation.findNavController(v).navigate(action);
@@ -112,7 +125,13 @@ public class HolidayInputFragment extends Fragment implements DatePickerDialog.O
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        navController = Navigation.findNavController(view);
+        if(getArguments() != null) {
+            navController = Navigation.findNavController(view);
+            holidayEditID = (int) getArguments().getLong("ID");
+            mEditHolidayView.setText(getArguments().getString("Name"));
+            holidayDesc.setText(getArguments().getString("Memory"));
+            editHoliday = true;
+        }
     }
 
     @Override
@@ -120,8 +139,5 @@ public class HolidayInputFragment extends Fragment implements DatePickerDialog.O
         StringBuilder sb = new StringBuilder().append(dayOfMonth).append("/").append(monthOfYear + 1);
         String formattedDate = sb.toString();
         startDateText.setText(formattedDate);
-
     }
-
-
 }

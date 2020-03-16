@@ -6,8 +6,10 @@ import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
+import java.io.Serializable;
+
 @Entity( tableName = "holiday_table")
-public class Holiday {
+public class Holiday implements Serializable {
     @PrimaryKey( autoGenerate = true )
     @NonNull
     @ColumnInfo(name = "ID")
@@ -29,10 +31,14 @@ public class Holiday {
         _id = id;
     }
 
+    public int get_id () { return _id;
+    }
+
     public String getName () { return name;
     }
 
-    public int get_id () { return _id;
+    public void setName(String name){
+        this.name = name;
     }
 
     public void setHolidayMemory(String holidayMemory) {

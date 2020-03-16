@@ -1,29 +1,42 @@
 package com.example.travelapp.ui.holiday;
 
 import android.content.Context;
+import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.TextView;
 
+import androidx.fragment.app.Fragment;
+import androidx.navigation.NavDirections;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.travelapp.R;
+import com.example.travelapp.ui.holidayInput.HolidayInputFragment;
 
 import java.util.List;
+
+import static android.content.ContentValues.TAG;
 
 public class HolidayListAdapter extends RecyclerView.Adapter<HolidayListAdapter.HolidayViewHolder> {
 
     private final LayoutInflater mInflater;
     private List<Holiday> mHolidays; // Cached copy of holidays
-    private static ClickListener clickListener;
+    private OnHolidayListener mOnHolidayListener;
 
-    HolidayListAdapter(Context context) { mInflater = LayoutInflater.from(context); }
+    HolidayListAdapter(Context context, OnHolidayListener onHolidayListener) {
+        mInflater = LayoutInflater.from(context);
+        this.mOnHolidayListener = onHolidayListener;
+    }
 
     @Override
     public HolidayViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemView = mInflater.inflate(R.layout.recyclerview_item, parent, false);
-        return new HolidayViewHolder(itemView);
+
+        return new HolidayViewHolder(itemView, mOnHolidayListener);
     }
 
     @Override
@@ -55,26 +68,31 @@ public class HolidayListAdapter extends RecyclerView.Adapter<HolidayListAdapter.
         return mHolidays.get(position);
     }
 
-    class HolidayViewHolder extends RecyclerView.ViewHolder {
+    class HolidayViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         private final TextView holidayItemView;
+        OnHolidayListener onHolidayListener;
 
-        private HolidayViewHolder(View itemView) {
+        private HolidayViewHolder(View itemView, OnHolidayListener onHolidayListener) {
             super(itemView);
             holidayItemView = itemView.findViewById(R.id.textView);
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    clickListener.onItemClick(view, getAdapterPosition());
-                }
-            });
+            this.onHolidayListener = onHolidayListener;
+
+            itemView.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View view) {
+            onHolidayListener.onHolidayClick(getAdapterPosition());
+            Bundle bundle = new Bundle();
+            bundle.putLong("ID", mHolidays.get(getAdapterPosition()).get_id());
+            bundle.putString("Name", mHolidays.get(getAdapterPosition()).getName());
+            bundle.putString("Memory", mHolidays.get(getAdapterPosition()).getHolidayMemory());
+
+            Navigation.findNavController(itemView).navigate(R.id.holiday_input, bundle);
         }
     }
 
-    public void setOnItemClickListener(ClickListener clickListener) {
-        HolidayListAdapter.clickListener = clickListener;
-    }
-
-    public interface ClickListener {
-        void onItemClick(View v, int position);
+    public interface OnHolidayListener{
+        void onHolidayClick(int position);
     }
 }

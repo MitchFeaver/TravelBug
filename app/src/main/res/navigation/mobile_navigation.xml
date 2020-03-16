@@ -18,7 +18,7 @@
         tools:layout="@layout/fragment_holiday">
         <action
             android:id="@+id/action_nav_holiday_to_holidayInput"
-            app:destination="@id/holidayInput" />
+            app:destination="@id/holiday_input" />
     </fragment>
 
     <fragment
@@ -34,10 +34,10 @@
         tools:layout="@layout/fragment_slideshow" />
 
     <fragment
-        android:id="@+id/nav_tools"
-        android:name="com.example.travelapp.ui.tools.ToolsFragment"
-        android:label="@string/menu_tools"
-        tools:layout="@layout/fragment_tools" />
+        android:id="@+id/nav_maps"
+        android:name="com.example.travelapp.ui.maps.MapsFragment"
+        android:label="@string/nav_maps"
+        tools:layout="@layout/fragment_maps" />
 
     <fragment
         android:id="@+id/nav_share"
@@ -51,12 +51,17 @@
         android:label="@string/menu_send"
         tools:layout="@layout/fragment_send" />
     <fragment
-        android:id="@+id/holidayInput"
+        android:id="@+id/holiday_input"
         android:name="com.example.travelapp.ui.holidayInput.HolidayInputFragment"
-        android:label="fragment_holiday_input"
-        tools:layout="@layout/fragment_holiday_input" >
+        android:label="Holiday"
+        tools:layout="@layout/fragment_holiday_input">
         <action
             android:id="@+id/action_holidayInput_to_nav_holiday"
             app:destination="@id/nav_holiday" />
+        <argument
+            android:name="@string/Menu_holiday"
+            android:defaultValue="@null"
+            app:argType="com.example.travelapp.ui.holiday.Holiday"
+            app:nullable="true" />
     </fragment>
 </navigation>
