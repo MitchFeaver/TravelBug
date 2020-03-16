@@ -25,4 +25,6 @@
     <string name="datepicker">datePicker</string>
     <string name="remember_hint">What do you want to remember?</string>
     <string name="clear_all_holidays">Clear all holidays</string>
+    <string name="nav_maps">Maps</string>
+    <string name="Menu_holiday">holiday</string>
 </resources>

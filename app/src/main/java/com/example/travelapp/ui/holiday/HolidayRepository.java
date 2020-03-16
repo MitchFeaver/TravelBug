@@ -39,6 +39,22 @@ public class HolidayRepository {
         new insertAsyncTask(mHolidayDao).execute(holiday);
     }
 
+    public void update(Holiday holiday) { new UpdateNoteAsyncTask(mHolidayDao).execute(holiday); }
+
+    private static class UpdateNoteAsyncTask extends AsyncTask<Holiday, Void, Void> {
+        private HolidayDao holidayDao;
+
+        private UpdateNoteAsyncTask(HolidayDao holidayDao) {
+            this.holidayDao = holidayDao;
+        }
+
+        @Override
+        protected Void doInBackground(Holiday... holidays) {
+            holidayDao.update(holidays[0]);
+            return null;
+        }
+    }
+
     private static class insertAsyncTask extends AsyncTask<Holiday, Void, Void> {
 
         private HolidayDao mAsyncTaskDao;
