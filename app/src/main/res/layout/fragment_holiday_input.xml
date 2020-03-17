@@ -60,8 +60,7 @@
         android:layout_marginTop="8dp"
         android:layout_marginEnd="0dp"
         android:textAlignment="center"
-        android:textIsSelectable="false"
-        tools:text="@tools:sample/date/ddmmyy" />
+        android:textIsSelectable="false" />
 
     <TextView
         android:id="@+id/endDateText"
@@ -74,8 +73,7 @@
         android:layout_marginTop="8dp"
         android:layout_marginEnd="0dp"
         android:textAlignment="center"
-        android:textIsSelectable="false"
-        tools:text="@tools:sample/date/ddmmyy" />
+        android:textIsSelectable="false" />
 
     <EditText
         android:id="@+id/notesText"

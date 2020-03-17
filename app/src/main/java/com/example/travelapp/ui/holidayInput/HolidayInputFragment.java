@@ -1,13 +1,18 @@
 package com.example.travelapp.ui.holidayInput;
 
 
+import android.app.Activity;
 import android.app.DatePickerDialog;
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDialogFragment;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.NavController;
 import androidx.navigation.NavDirections;
@@ -36,7 +41,8 @@ import java.util.Calendar;
 import static android.content.ContentValues.TAG;
 
 
-public class HolidayInputFragment extends Fragment implements DatePickerDialog.OnDateSetListener {
+public class HolidayInputFragment extends Fragment {
+
     private HolidayViewModel mHolidayViewModel;
     private EditText mEditHolidayView;
     private NavController navController;
@@ -48,6 +54,9 @@ public class HolidayInputFragment extends Fragment implements DatePickerDialog.O
     private TextView travelBuddy;
     private Boolean editHoliday = false;
     private int holidayEditID;
+
+    DatePickerDialog picker;
+
 
     public HolidayInputFragment() {
         // Required empty public constructor
@@ -61,7 +70,8 @@ public class HolidayInputFragment extends Fragment implements DatePickerDialog.O
     @Override
     public View onCreateView (LayoutInflater inflater, ViewGroup container,
                               Bundle savedInstanceState) {
-// Inflate the layout for this fragment
+
+        // Inflate the layout for this fragment
         final View v = inflater.inflate(R.layout.fragment_holiday_input, container, false);
         mEditHolidayView = v.findViewById(R.id.holidayName);
         mHolidayViewModel = ViewModelProviders.of(this).get(HolidayViewModel.class );
@@ -82,24 +92,27 @@ public class HolidayInputFragment extends Fragment implements DatePickerDialog.O
                     if (TextUtils.isEmpty(mEditHolidayView.getText())) {
                         Snackbar.make(view, "You need to enter a name", Snackbar.LENGTH_LONG)
                                 .setAction("Action ", null).show();
-                    } else if(!editHoliday){
+                    }else if (TextUtils.isEmpty(startDateText.getText()) ||
+                                    TextUtils.isEmpty(endDateText.getText())){
+                        Snackbar.make(view, "You need to enter both dates", Snackbar.LENGTH_LONG)
+                                .setAction("Action ", null).show();
+                    } else {
+                        Log.d(TAG, "onClick: !editHoliday");
                         Holiday h = new Holiday(mEditHolidayView.getText().toString());
                         h.setHolidayMemory(holidayDesc.getText().toString());
                         h.setTravelBuddy(travelBuddy.getText().toString());
-                        mHolidayViewModel.insert(h);
-                        NavDirections action =
-                                HolidayInputFragmentDirections.actionHolidayInputToNavHoliday();
-                        Navigation.findNavController(v).navigate(action);
-                    }else{
-                        Holiday holiday = new Holiday(mEditHolidayView.getText().toString());
-                        holiday.setHolidayMemory(holidayDesc.getText().toString());
-                        holiday.setTravelBuddy(holidayDesc.getText().toString());
-                        holiday.set_id(holidayEditID);
-                        mHolidayViewModel.update(holiday);
+                        h.setStartDate(startDateText.getText().toString());
+                        h.setEndDate(endDateText.getText().toString());
 
-                        NavDirections action =
-                                HolidayInputFragmentDirections.actionHolidayInputToNavHoliday();
-                        Navigation.findNavController(v).navigate(action);
+                    if (editHoliday){
+                        h.set_id(holidayEditID);
+                        mHolidayViewModel.update(h);
+                    }else{
+                        mHolidayViewModel.insert(h);
+                    }
+                NavDirections action =
+                    HolidayInputFragmentDirections.actionHolidayInputToNavHoliday();
+                Navigation.findNavController(v).navigate(action);
                     }
                 }
             });
@@ -108,18 +121,38 @@ public class HolidayInputFragment extends Fragment implements DatePickerDialog.O
         startDateButton.setOnClickListener(new View.OnClickListener() {  // setting listener for user click event
             @Override
             public void onClick(View v) {
-                DialogFragment newFragment = new DatePickerFragment();
-                newFragment.show(getFragmentManager(),
-                        getString(R.string.datepicker));
+                final Calendar calendar = Calendar.getInstance();
+                int day = calendar.get(Calendar.DAY_OF_MONTH);
+                int month = calendar.get(Calendar.MONTH);
+                int year = calendar.get(Calendar.YEAR);
+
+                picker = new DatePickerDialog(getContext(),
+                        new DatePickerDialog.OnDateSetListener() {
+                            @Override
+                            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                                startDateText.setText(dayOfMonth + "/" + (monthOfYear + 1) + "/" + year);
+                            }
+                        }, year, month, day);
+                picker.show();
             }
         });
-
+        
         endDateButton.setOnClickListener(new View.OnClickListener() {  // setting listener for user click event
             @Override
             public void onClick(View v) {
-                DialogFragment newFragment = new DatePickerFragment();
-                newFragment.show(getFragmentManager(),
-                        getString(R.string.datepicker));
+                final Calendar calendar = Calendar.getInstance();
+                int day = calendar.get(Calendar.DAY_OF_MONTH);
+                int month = calendar.get(Calendar.MONTH);
+                int year = calendar.get(Calendar.YEAR);
+
+                picker = new DatePickerDialog(getContext(),
+                        new DatePickerDialog.OnDateSetListener() {
+                            @Override
+                            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                                endDateText.setText(dayOfMonth + "/" + (monthOfYear + 1) + "/" + year);
+                            }
+                        }, year, month, day);
+                picker.show();
             }
         });
         return v;
@@ -134,14 +167,9 @@ public class HolidayInputFragment extends Fragment implements DatePickerDialog.O
             mEditHolidayView.setText(getArguments().getString("Name"));
             holidayDesc.setText(getArguments().getString("Memory"));
             travelBuddy.setText(getArguments().getString("TravelBuddy"));
+            startDateText.setText(getArguments().getString("StartDate"));
+            endDateText.setText(getArguments().getString("EndDate"));
             editHoliday = true;
         }
-    }
-
-    @Override
-    public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) { // what should be done when a date is selected
-        StringBuilder sb = new StringBuilder().append(dayOfMonth).append("/").append(monthOfYear + 1);
-        String formattedDate = sb.toString();
-        startDateText.setText(formattedDate);
     }
 }

@@ -22,7 +22,7 @@
     <string name="start_date1">Start Date: </string>
     <string name="end_date">End Date</string>
     <string name="end_date1">End Date: </string>
-    <string name="datepicker">datePicker</string>
+    <string name="date_picker">Date Picker</string>
     <string name="remember_hint">What do you want to remember?</string>
     <string name="clear_all_holidays">Clear all holidays</string>
     <string name="nav_maps">Maps</string>

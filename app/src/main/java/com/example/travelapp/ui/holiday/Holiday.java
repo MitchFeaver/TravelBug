@@ -27,6 +27,15 @@ public class Holiday implements Serializable {
     @ColumnInfo(name = " TRAVELBUDDY ")
     private String travelBuddy;
 
+    @NonNull
+    @ColumnInfo(name = " STARTDATE ")
+    private String startDate;
+
+    @NonNull
+    @ColumnInfo(name = " ENDDATE ")
+    private String endDate;
+
+
     public Holiday (@NonNull String name) { this.name = name; }
 
     public void set_id (int id) {
@@ -54,5 +63,13 @@ public class Holiday implements Serializable {
     public String getTravelBuddy() {
         return travelBuddy;
     }
+
+    public void setStartDate(String startDate){ this.startDate = startDate; }
+
+    public String getStartDate(){ return startDate; }
+
+    public void setEndDate(String endDate){ this.endDate = endDate; }
+
+    public String getEndDate(){ return endDate; }
 
 }
