@@ -2,7 +2,7 @@
     <string name="app_name">TravelApp</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
-    <string name="nav_header_title">Android Studio</string>
+    <string name="nav_header_title">TravelBug</string>
     <string name="nav_header_subtitle">android.studio@android.com</string>
     <string name="nav_header_desc">Navigation header</string>
     <string name="action_settings">Settings</string>
@@ -15,7 +15,6 @@
     <string name="menu_send">Send</string>
     <string name="menu_holiday">Holidays</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="enter_a_holiday_name">Enter a holiday name</string>
     <string name="start_date">Start Date</string>

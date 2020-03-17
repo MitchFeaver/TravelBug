@@ -20,9 +20,9 @@
         android:id="@+id/companionText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
+        android:layout_below="@+id/startDateText"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="242dp"
+        android:layout_marginTop="8dp"
         android:autofillHints=""
         android:hint="@string/enter_travel_buddies"
         android:inputType="textPersonName" />
@@ -79,11 +79,12 @@
         android:id="@+id/notesText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/holidayName"
+        android:layout_below="@+id/companionText"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="110dp"
+        android:layout_marginTop="8dp"
         android:autofillHints=""
         android:hint="@string/remember_hint"
-        android:inputType="textCapSentences|textAutoCorrect|textMultiLine" />
+        android:inputType="textCapSentences|textAutoCorrect|textMultiLine"
+        android:maxLines="4" />
 
 </RelativeLayout>
