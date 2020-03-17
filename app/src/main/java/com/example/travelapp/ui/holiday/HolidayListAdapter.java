@@ -87,7 +87,7 @@ public class HolidayListAdapter extends RecyclerView.Adapter<HolidayListAdapter.
             bundle.putLong("ID", mHolidays.get(getAdapterPosition()).get_id());
             bundle.putString("Name", mHolidays.get(getAdapterPosition()).getName());
             bundle.putString("Memory", mHolidays.get(getAdapterPosition()).getHolidayMemory());
-
+            bundle.putString("TravelBuddy", mHolidays.get(getAdapterPosition()).getTravelBuddy());
             Navigation.findNavController(itemView).navigate(R.id.holiday_input, bundle);
         }
     }

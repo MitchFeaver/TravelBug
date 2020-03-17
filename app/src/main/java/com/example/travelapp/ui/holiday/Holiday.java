@@ -23,19 +23,19 @@ public class Holiday implements Serializable {
     @ColumnInfo(name = " DESCRIPTION ")
     private String holidayMemory;
 
-    public Holiday (@NonNull String name) {
-        this.name = name;
-    }
+    @NonNull
+    @ColumnInfo(name = " TRAVELBUDDY ")
+    private String travelBuddy;
+
+    public Holiday (@NonNull String name) { this.name = name; }
 
     public void set_id (int id) {
         _id = id;
     }
 
-    public int get_id () { return _id;
-    }
+    public int get_id () { return _id; }
 
-    public String getName () { return name;
-    }
+    public String getName () { return name; }
 
     public void setName(String name){
         this.name = name;
@@ -49,5 +49,10 @@ public class Holiday implements Serializable {
         return holidayMemory;
     }
 
+    public void setTravelBuddy(String travelBuddy) {this.travelBuddy = travelBuddy; }
+
+    public String getTravelBuddy() {
+        return travelBuddy;
+    }
 
 }

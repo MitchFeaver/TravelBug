@@ -16,6 +16,17 @@
         android:inputType="textPersonName"
         android:autofillHints="" />
 
+    <EditText
+        android:id="@+id/companionText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="242dp"
+        android:autofillHints=""
+        android:hint="@string/enter_travel_buddies"
+        android:inputType="textPersonName" />
+
     <Button
         android:id="@+id/startDateButton"
         android:layout_width="wrap_content"

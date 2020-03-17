@@ -67,6 +67,7 @@ public abstract class HolidayRoomDatabase extends RoomDatabase {
             if (mDao.getAnyHoliday().length < 1) {
                 for (int i = 0; i <= holidays.length - 1; i++) {
                     Holiday holiday = new Holiday(holidays[i]);
+                    holiday.setTravelBuddy("John Doe, James Smith");
                     holiday.setHolidayMemory("This is a sample memory");
                     mDao.insert(holiday);
                 }

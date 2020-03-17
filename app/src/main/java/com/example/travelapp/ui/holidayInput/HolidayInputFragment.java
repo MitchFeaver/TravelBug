@@ -38,7 +38,6 @@ import static android.content.ContentValues.TAG;
 
 public class HolidayInputFragment extends Fragment implements DatePickerDialog.OnDateSetListener {
     private HolidayViewModel mHolidayViewModel;
-    private Holiday mHoliday;
     private EditText mEditHolidayView;
     private NavController navController;
     private Button startDateButton;
@@ -46,6 +45,7 @@ public class HolidayInputFragment extends Fragment implements DatePickerDialog.O
     private TextView startDateText;
     private TextView endDateText;
     private TextView holidayDesc;
+    private TextView travelBuddy;
     private Boolean editHoliday = false;
     private int holidayEditID;
 
@@ -71,6 +71,7 @@ public class HolidayInputFragment extends Fragment implements DatePickerDialog.O
         endDateButton = v.findViewById(R.id.endDateButton);
         endDateText = v.findViewById(R.id.endDateText);
         holidayDesc = v.findViewById(R.id.notesText);
+        travelBuddy = v.findViewById(R.id.companionText);
 
         FloatingActionButton fab = getActivity().findViewById(R.id.fab);
         fab.setImageResource (R.drawable.ic_save_black_24dp);
@@ -84,6 +85,7 @@ public class HolidayInputFragment extends Fragment implements DatePickerDialog.O
                     } else if(!editHoliday){
                         Holiday h = new Holiday(mEditHolidayView.getText().toString());
                         h.setHolidayMemory(holidayDesc.getText().toString());
+                        h.setTravelBuddy(travelBuddy.getText().toString());
                         mHolidayViewModel.insert(h);
                         NavDirections action =
                                 HolidayInputFragmentDirections.actionHolidayInputToNavHoliday();
@@ -91,6 +93,7 @@ public class HolidayInputFragment extends Fragment implements DatePickerDialog.O
                     }else{
                         Holiday holiday = new Holiday(mEditHolidayView.getText().toString());
                         holiday.setHolidayMemory(holidayDesc.getText().toString());
+                        holiday.setTravelBuddy(holidayDesc.getText().toString());
                         holiday.set_id(holidayEditID);
                         mHolidayViewModel.update(holiday);
 
@@ -130,6 +133,7 @@ public class HolidayInputFragment extends Fragment implements DatePickerDialog.O
             holidayEditID = (int) getArguments().getLong("ID");
             mEditHolidayView.setText(getArguments().getString("Name"));
             holidayDesc.setText(getArguments().getString("Memory"));
+            travelBuddy.setText(getArguments().getString("TravelBuddy"));
             editHoliday = true;
         }
     }
