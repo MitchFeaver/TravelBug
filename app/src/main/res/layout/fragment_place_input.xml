@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="ui.placeInput.PlaceInputFragment">
+
+    <EditText
+        android:id="@+id/placeName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="16dp"
+        android:hint="@string/enter_a_place_name"
+        android:inputType="textPersonName"
+        android:autofillHints="" />
+
+    <EditText
+        android:id="@+id/location"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/dateText"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="8dp"
+        android:autofillHints=""
+        android:hint="@string/enter_location"
+        android:inputType="textPersonName" />
+
+    <Button
+        android:id="@+id/dateButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/placeName"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+        android:layout_centerHorizontal="true"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginStart="152dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="152dp"
+        android:text="@string/date" />
+
+    <TextView
+        android:id="@+id/dateText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/dateButton"
+        android:layout_alignStart="@+id/dateButton"
+        android:layout_alignEnd="@+id/dateButton"
+        android:layout_marginStart="0dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="0dp"
+        android:textAlignment="center"
+        android:textIsSelectable="false" />
+
+    <EditText
+        android:id="@+id/notesText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/location"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="8dp"
+        android:autofillHints=""
+        android:hint="@string/remember_hint"
+        android:inputType="textCapSentences|textAutoCorrect|textMultiLine"
+        android:maxLines="3" />
+
+<!--    <Button-->
+<!--        android:id="@+id/currentLocationButton"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_alignTop="@+id/location"-->
+<!--        android:layout_alignBottom="@+id/location"-->
+<!--        android:layout_alignParentEnd="true"-->
+<!--        android:layout_marginStart="8dp"-->
+<!--        android:layout_marginTop="0dp"-->
+<!--        android:layout_marginEnd="50dp"-->
+<!--        android:layout_marginBottom="0dp"-->
+<!--        android:layout_toEndOf="@+id/location"-->
+<!--        android:drawableTop="@drawable/ic_my_location_black_24dp" />-->
+
+    <Button
+        android:id="@+id/addImageButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/imageView"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="119dp"
+        android:layout_marginBottom="5dp"
+        android:text="Add Image" />
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="300dp"
+        android:layout_height="300dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="8dp"
+        android:contentDescription="@string/an_image_view_set_by_user"
+        android:scaleType="centerInside" />
+
+    <!--    <Spinner-->
+<!--        android:id="@+id/spinner"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_alignParentStart="true"-->
+<!--        android:layout_alignParentTop="true"-->
+<!--        android:layout_centerHorizontal="true"-->
+<!--        android:layout_marginStart="182dp"-->
+<!--        android:layout_marginTop="266dp" />-->
+
+</RelativeLayout>

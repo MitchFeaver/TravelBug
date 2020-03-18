@@ -13,9 +13,9 @@
             android:icon="@drawable/ic_menu_holiday"
             android:title="@string/menu_holiday" />
         <item
-            android:id="@+id/nav_slideshow"
-            android:icon="@drawable/ic_menu_slideshow"
-            android:title="@string/menu_slideshow" />
+            android:id="@+id/nav_place"
+            android:icon="@drawable/ic_location_city_black_24dp"
+            android:title="@string/menu_place" />
         <item
             android:id="@+id/nav_gallery"
             android:icon="@drawable/ic_menu_gallery"

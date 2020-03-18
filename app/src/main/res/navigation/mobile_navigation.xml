@@ -28,12 +28,6 @@
         tools:layout="@layout/fragment_gallery" />
 
     <fragment
-        android:id="@+id/nav_slideshow"
-        android:name="com.example.travelapp.ui.slideshow.SlideshowFragment"
-        android:label="@string/menu_slideshow"
-        tools:layout="@layout/fragment_slideshow" />
-
-    <fragment
         android:id="@+id/nav_maps"
         android:name="com.example.travelapp.ui.maps.MapsFragment"
         android:label="@string/nav_maps"
@@ -62,6 +56,29 @@
             android:name="@string/Menu_holiday"
             android:defaultValue="@null"
             app:argType="com.example.travelapp.ui.holiday.Holiday"
+            app:nullable="true" />
+    </fragment>
+    <fragment
+        android:id="@+id/nav_place"
+        android:name="com.example.travelapp.ui.place.PlaceFragment"
+        android:label="fragment_place"
+        tools:layout="@layout/fragment_place" >
+        <action
+            android:id="@+id/action_nav_place_to_placeInput"
+            app:destination="@id/place_input" />
+    </fragment>
+    <fragment
+        android:id="@+id/place_input"
+        android:name="com.example.travelapp.ui.placeInput.PlaceInputFragment"
+        android:label="fragment_place_input"
+        tools:layout="@layout/fragment_place_input" >
+        <action
+            android:id="@+id/action_place_input_to_nav_place"
+            app:destination="@id/nav_place" />
+        <argument
+            android:name="@string/Menu_place"
+            android:defaultValue="@null"
+            app:argType="com.example.travelapp.ui.place.Place"
             app:nullable="true" />
     </fragment>
 </navigation>

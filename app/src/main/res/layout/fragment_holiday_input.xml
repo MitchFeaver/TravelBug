@@ -17,10 +17,10 @@
         android:autofillHints="" />
 
     <EditText
-        android:id="@+id/companionText"
+        android:id="@+id/location"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/startDateText"
+        android:layout_below="@+id/dateText"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="8dp"
         android:autofillHints=""
@@ -28,7 +28,7 @@
         android:inputType="textPersonName" />
 
     <Button
-        android:id="@+id/startDateButton"
+        android:id="@+id/dateButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/holidayName"
@@ -50,12 +50,12 @@
         android:text="@string/end_date" />
 
     <TextView
-        android:id="@+id/startDateText"
+        android:id="@+id/dateText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/startDateButton"
-        android:layout_alignStart="@+id/startDateButton"
-        android:layout_alignEnd="@+id/startDateButton"
+        android:layout_below="@+id/dateButton"
+        android:layout_alignStart="@+id/dateButton"
+        android:layout_alignEnd="@+id/dateButton"
         android:layout_marginStart="0dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="0dp"
@@ -79,12 +79,12 @@
         android:id="@+id/notesText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/companionText"
+        android:layout_below="@+id/location"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="8dp"
         android:autofillHints=""
         android:hint="@string/remember_hint"
         android:inputType="textCapSentences|textAutoCorrect|textMultiLine"
-        android:maxLines="4" />
+        android:maxLines="3" />
 
 </RelativeLayout>

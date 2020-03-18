@@ -1,18 +1,12 @@
 package com.example.travelapp.ui.holidayInput;
 
 
-import android.app.Activity;
 import android.app.DatePickerDialog;
-import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.app.AppCompatDialogFragment;
-import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.NavController;
 import androidx.navigation.NavDirections;
@@ -30,12 +24,10 @@ import android.widget.TextView;
 
 import com.example.travelapp.R;
 import com.example.travelapp.ui.holiday.Holiday;
-import com.example.travelapp.ui.holiday.HolidayListAdapter;
 import com.example.travelapp.ui.holiday.HolidayViewModel;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
-import java.text.DateFormat;
 import java.util.Calendar;
 
 import static android.content.ContentValues.TAG;
@@ -76,12 +68,12 @@ public class HolidayInputFragment extends Fragment {
         mEditHolidayView = v.findViewById(R.id.holidayName);
         mHolidayViewModel = ViewModelProviders.of(this).get(HolidayViewModel.class );
 
-        startDateButton = v.findViewById(R.id.startDateButton);
-        startDateText = v.findViewById(R.id.startDateText);
+        startDateButton = v.findViewById(R.id.dateButton);
+        startDateText = v.findViewById(R.id.dateText);
         endDateButton = v.findViewById(R.id.endDateButton);
         endDateText = v.findViewById(R.id.endDateText);
         holidayDesc = v.findViewById(R.id.notesText);
-        travelBuddy = v.findViewById(R.id.companionText);
+        travelBuddy = v.findViewById(R.id.location);
 
         FloatingActionButton fab = getActivity().findViewById(R.id.fab);
         fab.setImageResource (R.drawable.ic_save_black_24dp);
