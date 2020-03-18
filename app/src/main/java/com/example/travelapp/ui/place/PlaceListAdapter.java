@@ -80,8 +80,8 @@ public class PlaceListAdapter extends RecyclerView.Adapter<PlaceListAdapter.Plac
             bundle.putLong("ID", mPlaces.get(getAdapterPosition()).get_id());
             bundle.putString("Name", mPlaces.get(getAdapterPosition()).getName());
             bundle.putString("Memory", mPlaces.get(getAdapterPosition()).getPlaceMemory());
-            bundle.putString("TravelBuddy", mPlaces.get(getAdapterPosition()).getLocation());
-            bundle.putString("StartDate", mPlaces.get(getAdapterPosition()).getDate());
+            bundle.putString("Location", mPlaces.get(getAdapterPosition()).getLocation());
+            bundle.putString("Date", mPlaces.get(getAdapterPosition()).getDate());
             Navigation.findNavController(itemView).navigate(R.id.place_input, bundle);
         }
     }

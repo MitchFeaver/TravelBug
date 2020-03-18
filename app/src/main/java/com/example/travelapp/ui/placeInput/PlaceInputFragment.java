@@ -169,7 +169,7 @@ public class PlaceInputFragment extends Fragment {
             placeEditID = (int) getArguments().getLong("ID");
             mEditPlaceView.setText(getArguments().getString("Name"));
             placeDesc.setText(getArguments().getString("Memory"));
-            location.setText(getArguments().getString("TravelBuddy"));
+            location.setText(getArguments().getString("Location"));
             dateText.setText(getArguments().getString("Date"));
             editPlace = true;
         }

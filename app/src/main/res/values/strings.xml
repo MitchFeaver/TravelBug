@@ -29,4 +29,5 @@
     <string name="date">Date</string>
     <string name="enter_location">Enter a location</string>
     <string name="an_image_view_set_by_user">An image view set by user</string>
+    <string name="add_image">Add Image</string>
 </resources>
