@@ -82,6 +82,7 @@ public class PlaceListAdapter extends RecyclerView.Adapter<PlaceListAdapter.Plac
             bundle.putString("Memory", mPlaces.get(getAdapterPosition()).getPlaceMemory());
             bundle.putString("Location", mPlaces.get(getAdapterPosition()).getLocation());
             bundle.putString("Date", mPlaces.get(getAdapterPosition()).getDate());
+            bundle.putString("Image", mPlaces.get(getAdapterPosition()).getImage());
             Navigation.findNavController(itemView).navigate(R.id.place_input, bundle);
         }
     }

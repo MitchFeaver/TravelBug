@@ -1,6 +1,8 @@
 package com.example.travelapp.ui.place;
 
 
+import android.graphics.Bitmap;
+
 import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
@@ -35,6 +37,10 @@ public class Place implements Serializable {
 //    @ColumnInfo(name = " PLACEHOLIDAY ")
 //    private String placeHoliday;
 
+    @NonNull
+    @ColumnInfo(name = " IMAGE ")
+    private String image;
+
     public Place(@NonNull String name) { this.name = name; }
 
     public void set_id (int id) {
@@ -66,6 +72,10 @@ public class Place implements Serializable {
     public void setDate(String date){ this.date = date; }
 
     public String getDate(){ return date; }
+
+    public void setImage(String image){ this.image = image; }
+
+    public String getImage(){ return image; }
 
 //    public void setPlaceHoliday(String placeHoliday){ this.placeHoliday = placeHoliday; }
 //
