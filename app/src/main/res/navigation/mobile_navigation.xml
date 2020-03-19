@@ -22,12 +22,6 @@
     </fragment>
 
     <fragment
-        android:id="@+id/nav_gallery"
-        android:name="com.example.travelapp.ui.gallery.GalleryFragment"
-        android:label="@string/menu_gallery"
-        tools:layout="@layout/fragment_gallery" />
-
-    <fragment
         android:id="@+id/nav_maps"
         android:name="com.example.travelapp.ui.maps.MapsFragment"
         android:label="@string/nav_maps"
@@ -44,6 +38,7 @@
         android:name="com.example.travelapp.ui.send.SendFragment"
         android:label="@string/menu_send"
         tools:layout="@layout/fragment_send" />
+
     <fragment
         android:id="@+id/holiday_input"
         android:name="com.example.travelapp.ui.holidayInput.HolidayInputFragment"
@@ -58,6 +53,7 @@
             app:argType="com.example.travelapp.ui.holiday.Holiday"
             app:nullable="true" />
     </fragment>
+
     <fragment
         android:id="@+id/nav_place"
         android:name="com.example.travelapp.ui.place.PlaceFragment"

@@ -45,7 +45,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.travelapp.R;
-import com.example.travelapp.ui.holiday.Holiday;
 import com.example.travelapp.ui.place.Place;
 import com.example.travelapp.ui.place.PlaceViewModel;
 import com.example.travelapp.ui.placeInput.PlaceInputFragmentDirections;
@@ -80,8 +79,6 @@ public class PlaceInputFragment extends Fragment {
     private ImageView imageView;
     private Uri selectedImageUri;
     private Spinner spinnerHoliday;
-    private List<Holiday> mHolidays; // Cached copy of holidays
-
 
     DatePickerDialog picker;
 
@@ -111,7 +108,6 @@ public class PlaceInputFragment extends Fragment {
         addImageButton = v.findViewById(R.id.addImageButton);
         imageView = v.findViewById(R.id.imageView);
         spinnerHoliday = v.findViewById(R.id.spinner);
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource()
 
         FloatingActionButton fab = getActivity().findViewById(R.id.fab);
         fab.setImageResource(R.drawable.ic_save_black_24dp);
