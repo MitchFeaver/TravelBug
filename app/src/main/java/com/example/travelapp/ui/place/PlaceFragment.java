@@ -135,7 +135,5 @@ public class PlaceFragment extends Fragment implements PlaceListAdapter.OnPlaceL
     }
 
     @Override
-    public void onPlaceClick(int position) {
-        Log.i(TAG, "onClick: 2");
-    }
+    public void onPlaceClick(int position) {}
 }

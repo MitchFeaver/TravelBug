@@ -22,6 +22,15 @@
     </fragment>
 
     <fragment
+        android:id="@+id/nav_photo"
+        android:name="com.example.travelapp.ui.photo.PhotoFragment"
+        android:label="Photos"
+        tools:layout="@layout/fragment_holiday">
+        <action
+            android:id="@+id/action_nav_photo_to_photo_input"
+            app:destination="@id/photo_input" />
+    </fragment>
+    <fragment
         android:id="@+id/nav_maps"
         android:name="com.example.travelapp.ui.maps.MapsFragment"
         android:label="@string/nav_maps"
@@ -55,6 +64,21 @@
     </fragment>
 
     <fragment
+        android:id="@+id/photo_input"
+        android:name="com.example.travelapp.ui.photoInput.PhotoInputFragment"
+        android:label="Photo"
+        tools:layout="@layout/fragment_photo_input">
+        <argument
+            android:name="photo"
+            app:argType="com.example.travelapp.ui.photo.Photo"
+            app:nullable="true"
+            android:defaultValue="@null" />
+        <action
+            android:id="@+id/action_photo_input_to_nav_photo"
+            app:destination="@id/nav_photo" />
+    </fragment>
+
+    <fragment
         android:id="@+id/nav_place"
         android:name="com.example.travelapp.ui.place.PlaceFragment"
         android:label="fragment_place"
@@ -63,6 +87,7 @@
             android:id="@+id/action_nav_place_to_placeInput"
             app:destination="@id/place_input" />
     </fragment>
+
     <fragment
         android:id="@+id/place_input"
         android:name="com.example.travelapp.ui.placeInput.PlaceInputFragment"
@@ -77,4 +102,5 @@
             app:argType="com.example.travelapp.ui.place.Place"
             app:nullable="true" />
     </fragment>
+
 </navigation>

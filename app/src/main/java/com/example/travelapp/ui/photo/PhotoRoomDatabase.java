@@ -1,4 +1,4 @@
-package com.example.travelapp.ui.place;
+package com.example.travelapp.ui.photo;
 
 import android.content.Context;
 import android.os.AsyncTask;
@@ -9,22 +9,22 @@ import androidx.room.Room;
 import androidx.room.RoomDatabase;
 import androidx.sqlite.db.SupportSQLiteDatabase;
 
-import com.example.travelapp.ui.place.Place;
-import com.example.travelapp.ui.place.PlaceDao;
+import com.example.travelapp.ui.photo.Photo;
+import com.example.travelapp.ui.photo.PhotoDao;
 
-@Database(entities = {Place.class}, version = 1,  exportSchema = false)
-public abstract class PlaceRoomDatabase extends RoomDatabase {
+@Database(entities = {Photo.class}, version = 1,  exportSchema = false)
+public abstract class PhotoRoomDatabase extends RoomDatabase {
 
-    public abstract PlaceDao placeDao();
+    public abstract PhotoDao photoDao();
 
-    private static PlaceRoomDatabase INSTANCE;
+    private static PhotoRoomDatabase INSTANCE;
 
-    static PlaceRoomDatabase getDatabase(final Context context) {
+    static PhotoRoomDatabase getDatabase(final Context context) {
         if (INSTANCE == null) {
-            synchronized (PlaceRoomDatabase.class) {
+            synchronized (PhotoRoomDatabase.class) {
                 if (INSTANCE == null) {
                     INSTANCE = Room.databaseBuilder(context.getApplicationContext(),
-                            PlaceRoomDatabase.class, "place_database")
+                            PhotoRoomDatabase.class, "photo_database")
                             // Wipes and rebuilds instead of migrating if no Migration object.
                             // Migration is not part of this codelab.
                             .fallbackToDestructiveMigration()
@@ -56,25 +56,23 @@ public abstract class PlaceRoomDatabase extends RoomDatabase {
      */
     private static class PopulateDbAsync extends AsyncTask<Void, Void, Void> {
 
-        private final PlaceDao mDao;
-        String [] places = {"PlaceSample1"};
+        private final PhotoDao mDao;
+        String [] photos = {"PhotoSample1"};
 
-        PopulateDbAsync(PlaceRoomDatabase db) {
-            mDao = db.placeDao();
+        PopulateDbAsync(PhotoRoomDatabase db) {
+            mDao = db.photoDao();
         }
 
         @Override
         protected Void doInBackground(final Void... params) {
 
-            // If we have no places, then create the sample list
-            if (mDao.getAnyPlace().length < 1) {
-                for (int i = 0; i <= places.length - 1; i++) {
-                    Place place = new Place(places[i]);
-                    place.setLocation("London Eye");
-                    place.setPlaceMemory("This is a sample memory");
-                    place.setDate("1/1/19");
-                    place.setImage("");
-                    mDao.insert(place);
+            // If we have no photos, then create the sample list
+            if (mDao.getAnyPhoto().length < 1) {
+                for (int i = 0; i <= photos.length - 1; i++) {
+                    Photo photo = new Photo(photos[i]);
+                    photo.setHolidayName("Barcelona");
+                    photo.setPhotoURL("");
+                    mDao.insert(photo);
                 }
             }
             return null;

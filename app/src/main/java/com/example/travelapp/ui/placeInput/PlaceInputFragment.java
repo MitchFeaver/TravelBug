@@ -67,7 +67,6 @@ public class PlaceInputFragment extends Fragment {
 
     private PlaceViewModel mPlaceViewModel;
     private EditText mEditPlaceView;
-    private NavController navController;
     private Button dateButton;
     private Button currentLocationButton;
     private Button addImageButton;
@@ -175,9 +174,9 @@ public class PlaceInputFragment extends Fragment {
                     startActivityForResult(intent, IMAGE_REQUEST_CODE);
                 } else {
                     requestStoragePermission();
+                    }
                 }
-            }
-        });
+            });
 
         currentLocationButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -185,14 +184,11 @@ public class PlaceInputFragment extends Fragment {
                 if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
                     LocationManager locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
                     Location location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
-                    Log.d(TAG, "onClick: location");
                     try {
                         String city = hereLocation(location.getLatitude(), location.getLongitude());
                         locationText.setText(city);
-                        Log.d(TAG, "onClick: setText");
                     } catch (Exception e) {
                         e.printStackTrace();
-                        Log.d(TAG, "onClick: failText");
                         Toast.makeText(getContext(), "Not Found", Toast.LENGTH_SHORT).show();
                     }
                 } else {
@@ -207,15 +203,12 @@ public class PlaceInputFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         if (getArguments() != null) {
-            navController = Navigation.findNavController(view);
             placeEditID = (int) getArguments().getLong("ID");
             mEditPlaceView.setText(getArguments().getString("Name"));
             placeDesc.setText(getArguments().getString("Memory"));
             locationText.setText(getArguments().getString("Location"));
             dateText.setText(getArguments().getString("Date"));
             String stringUri = getArguments().getString("Image");
-            Log.d(TAG, "onViewCreated: " + getArguments().getString("Image"));
-            Log.d(TAG, "onViewCreated: " + stringUri);
             selectedImageUri = Uri.parse(stringUri);
             Picasso.with(getContext()).load(selectedImageUri).into(imageView);
             editPlace = true;

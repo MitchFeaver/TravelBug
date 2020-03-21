@@ -7,21 +7,25 @@
 
     <EditText
         android:id="@+id/placeName"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginStart="25dp"
         android:layout_marginTop="16dp"
+        android:layout_marginEnd="25dp"
+        android:autofillHints=""
         android:hint="@string/enter_a_place_name"
-        android:inputType="textPersonName"
-        android:autofillHints="" />
+        android:inputType="textPersonName" />
 
     <EditText
         android:id="@+id/location"
-        android:layout_width="wrap_content"
+        android:layout_width="267dp"
         android:layout_height="wrap_content"
         android:layout_below="@+id/placeName"
-        android:layout_centerHorizontal="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="25dp"
         android:layout_marginTop="8dp"
         android:autofillHints=""
         android:hint="@string/enter_location"
@@ -32,37 +36,35 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/location"
-        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
         android:layout_gravity="center_horizontal"
-        android:layout_marginStart="75dp"
         android:layout_marginTop="8dp"
+        android:layout_marginEnd="25dp"
         android:text="@string/date" />
 
     <TextView
         android:id="@+id/dateText"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignTop="@+id/dateButton"
-        android:layout_alignParentEnd="true"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="14dp"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="25dp"
+        android:layout_marginTop="15dp"
         android:layout_marginEnd="8dp"
-        android:layout_toEndOf="@+id/dateButton"
+        android:layout_toStartOf="@+id/dateButton"
         android:textAlignment="center"
         android:textIsSelectable="false" />
 
-        <Button
+    <Button
         android:id="@+id/currentLocationButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignTop="@+id/location"
         android:layout_alignBottom="@+id/location"
         android:layout_alignParentEnd="true"
-        android:layout_marginStart="8dp"
         android:layout_marginTop="0dp"
-        android:layout_marginEnd="50dp"
+        android:layout_marginEnd="25dp"
         android:layout_marginBottom="0dp"
-        android:layout_toEndOf="@+id/location"
         android:drawableTop="@drawable/ic_my_location_black_24dp" />
 
     <EditText
@@ -70,8 +72,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/dateButton"
-        android:layout_centerHorizontal="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginStart="25dp"
         android:layout_marginTop="8dp"
+        android:layout_marginEnd="25dp"
         android:autofillHints=""
         android:hint="@string/remember_hint"
         android:inputType="textCapSentences|textAutoCorrect|textMultiLine"
@@ -105,6 +110,6 @@
         android:layout_alignParentStart="true"
         android:layout_centerHorizontal="true"
         android:layout_marginStart="180dp"
-        android:layout_marginTop="73dp" />
+        android:layout_marginTop="8dp" />
 
 </RelativeLayout>
