@@ -38,4 +38,6 @@
     <string name="menu_photo">photo</string>
     <string name="menu_photos">Photos</string>
     <string name="listviewimage">ListViewImage</string>
+    <string name="google_maps_API_key">AIzaSyBH41wZLc_0fN1BdxX_uCa4ION1gS8Uf6g</string>
+    <string name="Enter_address">Enter Address, City or Post Code</string>
 </resources>
