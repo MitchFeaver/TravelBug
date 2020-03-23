@@ -3,39 +3,36 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:showIn="navigation_view">
 
-    <group android:checkableBehavior="single">
-        <item
-            android:id="@+id/nav_home"
-            android:icon="@drawable/ic_home_black_24dp"
-            android:title="@string/menu_home" />
-        <item
-            android:id="@+id/nav_holiday"
-            android:icon="@drawable/ic_menu_holiday"
-            android:title="@string/menu_holiday" />
-        <item
-            android:id="@+id/nav_place"
-            android:icon="@drawable/ic_location_city_black_24dp"
-            android:title="@string/menu_place" />
-        <item
-            android:id="@+id/nav_photo"
-            android:icon="@drawable/ic_menu_gallery"
-            android:title="@string/menu_photos" />
-        <item
-            android:id="@+id/nav_maps"
-            android:icon="@drawable/ic_map_black_24dp"
-            android:title="@string/nav_maps" />
-    </group>
+    <item
+        android:id="@+id/nav_home"
+        android:icon="@drawable/ic_home_black_24dp"
+        android:title="@string/menu_home" />
 
-    <item android:title="Communicate">
+    <item android:title="Add or View">
+        <group android:checkableBehavior="single">
+            <menu>
+                <item
+                    android:id="@+id/nav_holiday"
+                    android:icon="@drawable/ic_menu_holiday"
+                    android:title="@string/menu_holiday" />
+                <item
+                    android:id="@+id/nav_place"
+                    android:icon="@drawable/ic_location_on_black_24dp"
+                    android:title="@string/menu_place" />
+                <item
+                    android:id="@+id/nav_photo"
+                    android:icon="@drawable/ic_menu_gallery"
+                    android:title="@string/menu_photos" />
+            </menu>
+        </group>
+    </item>
+
+    <item android:title="Find Nearby Places">
         <menu>
             <item
-                android:id="@+id/nav_share"
-                android:icon="@drawable/ic_menu_share"
-                android:title="@string/menu_share" />
-            <item
-                android:id="@+id/nav_send"
-                android:icon="@drawable/ic_menu_send"
-                android:title="@string/menu_send" />
+                android:id="@+id/nav_maps"
+                android:icon="@drawable/ic_map_black_24dp"
+                android:title="@string/nav_maps" />
         </menu>
     </item>
 

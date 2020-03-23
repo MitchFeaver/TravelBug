@@ -24,7 +24,7 @@ public class HolidayViewModel extends AndroidViewModel {
         mAllHolidays = mRepository.getAllHolidays();
     }
 
-    LiveData<List<Holiday>> getAllHolidays() { return mAllHolidays; }
+    public LiveData<List<Holiday>> getAllHolidays() { return mAllHolidays; }
 
     public void insert(Holiday holiday) { mRepository.insert(holiday); }
 

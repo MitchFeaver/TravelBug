@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">TravelApp</string>
+    <string name="app_name">TravelBug</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="nav_header_title">TravelBug</string>
@@ -33,11 +33,12 @@
     <string name="choose_photo">Choose Photo</string>
     <string name="enter_a_photo_name">Enter a photo name</string>
 
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="Menu_photo">photo</string>
     <string name="menu_photo">photo</string>
     <string name="menu_photos">Photos</string>
     <string name="listviewimage">ListViewImage</string>
     <string name="google_maps_API_key">AIzaSyBH41wZLc_0fN1BdxX_uCa4ION1gS8Uf6g</string>
     <string name="Enter_address">Enter Address, City or Post Code</string>
+    <string name="clear_all_photos">Clear all photos</string>
+    <string name="clear_all_places">Clear all places</string>
 </resources>

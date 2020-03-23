@@ -73,6 +73,7 @@ public abstract class PlaceRoomDatabase extends RoomDatabase {
                     place.setLocation("London Eye");
                     place.setPlaceMemory("This is a sample memory");
                     place.setDate("1/1/19");
+                    place.setPlaceHoliday("SampleHoliday1");
                     place.setImage("");
                     mDao.insert(place);
                 }

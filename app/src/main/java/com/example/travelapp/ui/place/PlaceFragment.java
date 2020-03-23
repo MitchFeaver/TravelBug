@@ -26,6 +26,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.Toolbar;
 
 import androidx.navigation.NavDirections;
 
@@ -60,15 +61,16 @@ public class PlaceFragment extends Fragment implements PlaceListAdapter.OnPlaceL
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.menu_clear_data, menu);
+        inflater.inflate(R.menu.menu_clear_data_places, menu);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-        if (id == R.id.action_clear) {
-            placeViewModel.deleteAll();
-            return true;
+        switch (id) {
+            case R.id.action_clear:
+                placeViewModel.deleteAll();
+                return true;
         }
         return super.onOptionsItemSelected(item);
     }

@@ -3,6 +3,7 @@ package com.example.travelapp.ui.photo;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -50,17 +51,17 @@ public class PhotoFragment extends Fragment implements PhotoListAdapter.OnPhotoL
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.menu_clear_data, menu);
+        inflater.inflate(R.menu.menu_clear_data_photos, menu);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-        if (id == R.id.action_clear) {
-            photoViewModel.deleteAll();
-            return true;
+        switch (id) {
+            case R.id.action_clear:
+                photoViewModel.deleteAll();
+                return true;
         }
-
         return super.onOptionsItemSelected(item);
     }
 

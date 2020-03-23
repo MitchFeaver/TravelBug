@@ -33,6 +33,9 @@ import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -45,6 +48,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.travelapp.R;
+import com.example.travelapp.ui.holiday.Holiday;
+import com.example.travelapp.ui.holiday.HolidayViewModel;
 import com.example.travelapp.ui.place.Place;
 import com.example.travelapp.ui.place.PlaceViewModel;
 import com.example.travelapp.ui.placeInput.PlaceInputFragmentDirections;
@@ -77,17 +82,12 @@ public class PlaceInputFragment extends Fragment {
     private int placeEditID;
     private ImageView imageView;
     private Uri selectedImageUri;
-    private Spinner spinnerHoliday;
+    private TextView placeHoliday;
 
     DatePickerDialog picker;
 
     public PlaceInputFragment() {
         // Required empty public constructor
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
     }
 
     @Override
@@ -106,7 +106,7 @@ public class PlaceInputFragment extends Fragment {
         currentLocationButton = v.findViewById(R.id.currentLocationButton);
         addImageButton = v.findViewById(R.id.addImageButton);
         imageView = v.findViewById(R.id.imageView);
-        spinnerHoliday = v.findViewById(R.id.spinner);
+        placeHoliday = v.findViewById(R.id.placeHoliday);
 
         FloatingActionButton fab = getActivity().findViewById(R.id.fab);
         fab.setImageResource(R.drawable.ic_save_black_24dp);
@@ -125,6 +125,7 @@ public class PlaceInputFragment extends Fragment {
                         h.setPlaceMemory(placeDesc.getText().toString());
                         h.setLocation(locationText.getText().toString());
                         h.setDate(dateText.getText().toString());
+                        h.setPlaceHoliday(placeHoliday.getText().toString());
                         if (selectedImageUri != null) {
                             h.setImage(selectedImageUri.toString());
                         } else {
@@ -200,6 +201,39 @@ public class PlaceInputFragment extends Fragment {
     }
 
     @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.menu_share, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        switch (id) {
+            case R.id.action_share:
+                sharePlace();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    public void sharePlace(){
+        Intent shareIntent = new Intent();
+        shareIntent.setAction(Intent.ACTION_SEND);
+        shareIntent.putExtra(Intent.EXTRA_TEXT, "Check out this place: " + mEditPlaceView.getText().toString()
+                + ", Its at the location: " + locationText.getText().toString());
+        shareIntent.putExtra(Intent.EXTRA_STREAM, selectedImageUri);
+        shareIntent.setType("image/jpeg");
+        shareIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        startActivity(Intent.createChooser(shareIntent, "send"));
+    }
+
+    @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         if (getArguments() != null) {
@@ -208,13 +242,12 @@ public class PlaceInputFragment extends Fragment {
             placeDesc.setText(getArguments().getString("Memory"));
             locationText.setText(getArguments().getString("Location"));
             dateText.setText(getArguments().getString("Date"));
+            placeHoliday.setText(getArguments().getString("Holiday"));
             String stringUri = getArguments().getString("Image");
             selectedImageUri = Uri.parse(stringUri);
             Picasso.with(getContext()).load(selectedImageUri).into(imageView);
             editPlace = true;
         }
-
-        // here need to get all holidays to populate spinner
     }
 
     private void requestStoragePermission() {

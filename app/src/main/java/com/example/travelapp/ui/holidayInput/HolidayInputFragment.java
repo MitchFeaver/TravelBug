@@ -2,6 +2,7 @@ package com.example.travelapp.ui.holidayInput;
 
 
 import android.app.DatePickerDialog;
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -15,6 +16,9 @@ import androidx.navigation.Navigation;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -52,11 +56,6 @@ public class HolidayInputFragment extends Fragment {
 
     public HolidayInputFragment() {
         // Required empty public constructor
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
     }
 
     @Override
@@ -148,6 +147,40 @@ public class HolidayInputFragment extends Fragment {
             }
         });
         return v;
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.menu_share, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        switch (id) {
+            case R.id.action_share:
+                shareHoliday();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    public void shareHoliday(){
+        Intent sendIntent = new Intent();
+        sendIntent.setAction(Intent.ACTION_SEND);
+        sendIntent.putExtra(Intent.EXTRA_TEXT, "Check out my holiday: " + mEditHolidayView.getText().toString()
+                + ", This is when I went: " + startDateText.getText().toString()
+                + " - " + endDateText.getText().toString() + ", This is who I visited with: "
+                + travelBuddy.getText().toString() + ", This is how I described it: "
+                + holidayDesc.getText().toString());
+        sendIntent.setType("text/plain");
+        startActivity(Intent.createChooser(sendIntent, "Send this holiday to:"));
     }
 
     @Override
