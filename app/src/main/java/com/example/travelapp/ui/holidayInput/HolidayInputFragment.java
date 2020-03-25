@@ -29,6 +29,7 @@ import android.widget.TextView;
 import com.example.travelapp.R;
 import com.example.travelapp.ui.holiday.Holiday;
 import com.example.travelapp.ui.holiday.HolidayViewModel;
+import com.example.travelapp.ui.placeInput.PlaceInputFragmentArgs;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
@@ -57,6 +58,7 @@ public class HolidayInputFragment extends Fragment {
     private int endDay;
     private int endMonth;
     private int endYear;
+    private Holiday holiday;
 
     DatePickerDialog picker;
 
@@ -196,13 +198,21 @@ public class HolidayInputFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         if(getArguments() != null) {
-            navController = Navigation.findNavController(view);
-            holidayEditID = (int) getArguments().getLong("ID");
-            mEditHolidayView.setText(getArguments().getString("Name"));
-            holidayDesc.setText(getArguments().getString("Memory"));
-            travelBuddy.setText(getArguments().getString("TravelBuddy"));
-            startDateText.setText(getArguments().getString("StartDate"));
-            endDateText.setText(getArguments().getString("EndDate"));
+//            navController = Navigation.findNavController(view);
+//            holidayEditID = (int) getArguments().getLong("ID");
+//            mEditHolidayView.setText(getArguments().getString("Name"));
+//            holidayDesc.setText(getArguments().getString("Memory"));
+//            travelBuddy.setText(getArguments().getString("TravelBuddy"));
+//            startDateText.setText(getArguments().getString("StartDate"));
+//            endDateText.setText(getArguments().getString("EndDate"));
+            HolidayInputFragmentArgs args = HolidayInputFragmentArgs.fromBundle(getArguments());
+            holiday = args.getHoliday();
+            holidayEditID = holiday.get_id();
+            mEditHolidayView.setText(holiday.getName());
+            holidayDesc.setText(holiday.getHolidayMemory());
+            travelBuddy.setText(holiday.getTravelBuddy());
+            startDateText.setText(holiday.getStartDate());
+            endDateText.setText(holiday.getEndDate());
             editHoliday = true;
         }
     }

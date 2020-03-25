@@ -10,31 +10,13 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
-        android:layout_marginStart="25dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="25dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginStart="33dp"
+        android:layout_marginEnd="16dp"
         android:autofillHints=" "
         android:ems="10"
         android:hint="@string/enter_a_photo_name"
-        android:inputType="textPersonName"
-        tools:ignore="LabelFor" />
-
-    <EditText
-        android:id="@+id/photoHolidayName"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/photoName"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentEnd="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginStart="25dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="25dp"
-        android:autofillHints=" "
-        android:ems="10"
-        android:hint="@string/enter_a_holiday_name"
         android:inputType="textPersonName"
         tools:ignore="LabelFor" />
 
@@ -42,9 +24,10 @@
         android:id="@+id/chosePhotoButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/photoHolidayName"
+        android:layout_below="@+id/spinnerPhoto"
         android:layout_alignParentStart="true"
         android:layout_alignParentEnd="true"
+        android:layout_centerHorizontal="true"
         android:layout_marginStart="25dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="25dp"
@@ -75,4 +58,16 @@
         android:layout_marginBottom="8dp"
         android:contentDescription="@string/an_image_view_set_by_user"
         android:scaleType="centerInside" />
+
+    <Spinner
+        android:id="@+id/spinnerPhoto"
+        android:layout_width="386dp"
+        android:layout_height="0dp"
+        android:layout_below="@+id/photoName"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginStart="25dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="25dp" />
 </RelativeLayout>

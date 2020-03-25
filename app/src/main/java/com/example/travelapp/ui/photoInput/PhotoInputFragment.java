@@ -17,6 +17,7 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.NavController;
 import androidx.navigation.NavDirections;
@@ -32,14 +33,18 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.example.travelapp.R;
+import com.example.travelapp.ui.holiday.Holiday;
+import com.example.travelapp.ui.holiday.HolidayViewModel;
 import com.example.travelapp.ui.holidayInput.HolidayInputFragmentDirections;
 import com.example.travelapp.ui.photo.Photo;
 import com.example.travelapp.ui.photo.PhotoViewModel;
@@ -50,8 +55,10 @@ import com.squareup.picasso.Picasso;
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 import static android.content.ContentValues.TAG;
 
@@ -62,7 +69,6 @@ public class PhotoInputFragment extends Fragment {
     private static final int REQUEST_IMAGE_CODE = 2;
     private static final int IMAGE_REQUEST_CODE = 3;
     private static final int CAMERA_PERMISSION_CODE = 4;
-    private static final int PERMISSIONS_MULTIPLE_REQUEST = 5;
 
     private PhotoViewModel mPhotoViewModel;
     private EditText mEditPhotoView;
@@ -74,7 +80,13 @@ public class PhotoInputFragment extends Fragment {
     private int photoEditID;
     private Uri selectedImageUri;
     private String mCurrentPhotoPath;
-    private Bitmap mImageBitmap;
+    private Photo photo;
+    private String holidayName;
+    private HolidayViewModel holidayViewModel;
+    private List<String> holidayNames;
+    private ArrayAdapter<String> adapter;
+    private Spinner spinner;
+
 
     public PhotoInputFragment() {
         // Required empty public constructor
@@ -84,14 +96,42 @@ public class PhotoInputFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
+        if (getArguments() != null) {
+            holidayName = getArguments().getString("Holiday");
+        } else {
+            holidayName = null;
+        }
+
         // Inflate the layout for this fragment
         final View v = inflater.inflate(R.layout.fragment_photo_input, container, false);
         mEditPhotoView = v.findViewById(R.id.photoName);
         mPhotoViewModel = ViewModelProviders.of(this).get(PhotoViewModel.class);
         choosePhotoButton = v.findViewById(R.id.chosePhotoButton);
         takePhotoButton = v.findViewById(R.id.takePhotoButton);
-        photoHolidayName = v.findViewById(R.id.photoHolidayName);
         imageViewGallery = v.findViewById(R.id.imageViewGallery);
+
+        holidayNames = new ArrayList<>();
+        spinner = v.findViewById(R.id.spinnerPhoto);
+        adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, holidayNames);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner.setAdapter(adapter);
+        Log.d(TAG, "onCreateView: Spinner adapter set.");
+
+        holidayViewModel = ViewModelProviders.of(this).get(HolidayViewModel.class);
+        holidayViewModel.getAllHolidays().observe(this, new Observer<List<Holiday>>() {
+            @Override
+            public void onChanged(@Nullable final List<Holiday> holidays) {
+                for (Holiday holiday : holidays) {
+                    holidayNames.add(holiday.getName());
+                    Log.d(TAG, "onChanged: " +  holiday.getName());
+                }
+                adapter.notifyDataSetChanged();
+                if (holidayName != null) {
+                    int i = holidayNames.indexOf(holidayName);
+                    spinner.setSelection(i);
+                }
+            }
+        });
 
         FloatingActionButton fab = getActivity().findViewById(R.id.fab);
         fab.setImageResource(R.drawable.ic_save_black_24dp);
@@ -208,12 +248,20 @@ public class PhotoInputFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         if (getArguments() != null) {
-            photoEditID = (int) getArguments().getLong("ID");
-            mEditPhotoView.setText(getArguments().getString("Name"));
-            photoHolidayName.setText(getArguments().getString("HolidayName"));
-            String stringUri = getArguments().getString("PhotoURL");
-            selectedImageUri = Uri.parse(stringUri);
-            imageViewGallery.setImageURI(Uri.parse(stringUri));
+//            photoEditID = (int) getArguments().getLong("ID");
+//            mEditPhotoView.setText(getArguments().getString("Name"));
+//            photoHolidayName.setText(getArguments().getString("HolidayName"));
+//            String stringUri = getArguments().getString("PhotoURL");
+//            selectedImageUri = Uri.parse(stringUri);
+//            imageViewGallery.setImageURI(Uri.parse(stringUri));
+
+            PhotoInputFragmentArgs args = PhotoInputFragmentArgs.fromBundle(getArguments());
+            photo = args.getPhoto();
+            photoEditID = photo.get_id();
+            mEditPhotoView.setText(photo.getPhotoName());
+            photoHolidayName.setText(photo.getHolidayName());
+            selectedImageUri = Uri.parse(photo.getPhotoURL());
+            imageViewGallery.setImageURI(selectedImageUri);
             editPhoto = true;
         }
     }

@@ -10,6 +10,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
+import androidx.navigation.NavController;
 import androidx.navigation.NavDirections;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.RecyclerView;
@@ -82,15 +83,19 @@ public class HolidayListAdapter extends RecyclerView.Adapter<HolidayListAdapter.
 
         @Override
         public void onClick(View view) {
+            final NavController navController = Navigation.findNavController(view);
             onHolidayListener.onHolidayClick(getAdapterPosition());
-            Bundle bundle = new Bundle();
-            bundle.putLong("ID", mHolidays.get(getAdapterPosition()).get_id());
-            bundle.putString("Name", mHolidays.get(getAdapterPosition()).getName());
-            bundle.putString("Memory", mHolidays.get(getAdapterPosition()).getHolidayMemory());
-            bundle.putString("TravelBuddy", mHolidays.get(getAdapterPosition()).getTravelBuddy());
-            bundle.putString("StartDate", mHolidays.get(getAdapterPosition()).getStartDate());
-            bundle.putString("EndDate", mHolidays.get(getAdapterPosition()).getEndDate());
-            Navigation.findNavController(itemView).navigate(R.id.holiday_input, bundle);
+//            Bundle bundle = new Bundle();
+//            bundle.putLong("ID", mHolidays.get(getAdapterPosition()).get_id());
+//            bundle.putString("Name", mHolidays.get(getAdapterPosition()).getName());
+//            bundle.putString("Memory", mHolidays.get(getAdapterPosition()).getHolidayMemory());
+//            bundle.putString("TravelBuddy", mHolidays.get(getAdapterPosition()).getTravelBuddy());
+//            bundle.putString("StartDate", mHolidays.get(getAdapterPosition()).getStartDate());
+//            bundle.putString("EndDate", mHolidays.get(getAdapterPosition()).getEndDate());
+//            Navigation.findNavController(itemView).navigate(R.id.holiday_input, bundle);
+
+            HolidayFragmentDirections.ActionNavHolidayToHolidayInput action = HolidayFragmentDirections.actionNavHolidayToHolidayInput(mHolidays.get(getAdapterPosition()));
+            navController.navigate(action);
         }
     }
 

@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -75,18 +76,24 @@ public class PlaceListAdapter extends RecyclerView.Adapter<PlaceListAdapter.Plac
 
         @Override
         public void onClick(View view) {
+            final NavController navController = Navigation.findNavController(view);
             onPlaceListener.onPlaceClick(getAdapterPosition());
-            Bundle bundle = new Bundle();
-            bundle.putLong("ID", mPlaces.get(getAdapterPosition()).get_id());
-            bundle.putString("Name", mPlaces.get(getAdapterPosition()).getName());
-            bundle.putString("Memory", mPlaces.get(getAdapterPosition()).getPlaceMemory());
-            bundle.putString("Location", mPlaces.get(getAdapterPosition()).getLocation());
-            bundle.putString("Date", mPlaces.get(getAdapterPosition()).getDate());
-            bundle.putString("Image", mPlaces.get(getAdapterPosition()).getImage());
-            bundle.putString("Holiday", mPlaces.get(getAdapterPosition()).getPlaceHoliday());
-            bundle.putDouble("Latitude", mPlaces.get(getAdapterPosition()).getLatitude());
-            bundle.putDouble("Longitude", mPlaces.get(getAdapterPosition()).getLongitude());
-            Navigation.findNavController(itemView).navigate(R.id.place_input, bundle);
+//            Bundle bundle = new Bundle();
+//            bundle.putLong("ID", mPlaces.get(getAdapterPosition()).get_id());
+//            bundle.putString("Name", mPlaces.get(getAdapterPosition()).getName());
+//            bundle.putString("Memory", mPlaces.get(getAdapterPosition()).getPlaceMemory());
+//            bundle.putString("Location", mPlaces.get(getAdapterPosition()).getLocation());
+//            bundle.putString("Date", mPlaces.get(getAdapterPosition()).getDate());
+//            bundle.putString("Image", mPlaces.get(getAdapterPosition()).getImage());
+//            bundle.putString("Holiday", mPlaces.get(getAdapterPosition()).getPlaceHoliday());
+//            bundle.putDouble("Latitude", mPlaces.get(getAdapterPosition()).getLatitude());
+//            bundle.putDouble("Longitude", mPlaces.get(getAdapterPosition()).getLongitude());
+//            Navigation.findNavController(itemView).navigate(R.id.place_input, bundle);
+
+//            Place current = mPlaces.get(getAdapterPosition());
+
+            PlaceFragmentDirections.ActionNavPlaceToPlaceInput action = PlaceFragmentDirections.actionNavPlaceToPlaceInput(mPlaces.get(getAdapterPosition()));
+            navController.navigate(action);
         }
     }
 

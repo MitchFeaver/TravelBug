@@ -50,8 +50,7 @@
             android:id="@+id/action_holidayInput_to_nav_holiday"
             app:destination="@id/nav_holiday" />
         <argument
-            android:name="@string/Menu_holiday"
-            android:defaultValue="@null"
+            android:name="holiday"
             app:argType="com.example.travelapp.ui.holiday.Holiday"
             app:nullable="true" />
     </fragment>
@@ -61,14 +60,13 @@
         android:name="com.example.travelapp.ui.photoInput.PhotoInputFragment"
         android:label="Photo"
         tools:layout="@layout/fragment_photo_input">
-        <argument
-            android:name="photo"
-            app:argType="com.example.travelapp.ui.photo.Photo"
-            app:nullable="true"
-            android:defaultValue="@null" />
         <action
             android:id="@+id/action_photo_input_to_nav_photo"
             app:destination="@id/nav_photo" />
+        <argument
+            android:name="photo"
+            app:argType="com.example.travelapp.ui.photo.Photo"
+            app:nullable="true" />
     </fragment>
 
     <fragment
@@ -90,8 +88,7 @@
             android:id="@+id/action_place_input_to_nav_place"
             app:destination="@id/nav_place" />
         <argument
-            android:name="@string/Menu_place"
-            android:defaultValue="@null"
+            android:name="place"
             app:argType="com.example.travelapp.ui.place.Place"
             app:nullable="true" />
     </fragment>

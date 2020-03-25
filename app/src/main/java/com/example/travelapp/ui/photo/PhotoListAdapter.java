@@ -12,6 +12,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
+import androidx.navigation.NavController;
 import androidx.navigation.NavDirections;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.RecyclerView;
@@ -89,13 +90,17 @@ public class PhotoListAdapter extends RecyclerView.Adapter<PhotoListAdapter.Phot
 
         @Override
         public void onClick(View view) {
+            final NavController navController = Navigation.findNavController(view);
             onPhotoListener.onPhotoClick(getAdapterPosition());
-            Bundle bundle = new Bundle();
-            bundle.putLong("ID", mPhotos.get(getAdapterPosition()).get_id());
-            bundle.putString("Name", mPhotos.get(getAdapterPosition()).getPhotoName());
-            bundle.putString("PhotoURL", mPhotos.get(getAdapterPosition()).getPhotoURL());
-            bundle.putString("HolidayName", mPhotos.get(getAdapterPosition()).getHolidayName());
-            Navigation.findNavController(itemView).navigate(R.id.photo_input, bundle);
+//            Bundle bundle = new Bundle();
+//            bundle.putLong("ID", mPhotos.get(getAdapterPosition()).get_id());
+//            bundle.putString("Name", mPhotos.get(getAdapterPosition()).getPhotoName());
+//            bundle.putString("PhotoURL", mPhotos.get(getAdapterPosition()).getPhotoURL());
+//            bundle.putString("HolidayName", mPhotos.get(getAdapterPosition()).getHolidayName());
+//            Navigation.findNavController(itemView).navigate(R.id.photo_input, bundle);
+
+            PhotoFragmentDirections.ActionNavPhotoToPhotoInput action = PhotoFragmentDirections.actionNavPhotoToPhotoInput(mPhotos.get(getAdapterPosition()));
+            navController.navigate(action);
         }
     }
 

@@ -47,7 +47,11 @@ import com.example.travelapp.ui.holiday.HolidayViewModel;
 import com.example.travelapp.ui.place.Place;
 import com.example.travelapp.ui.place.PlaceViewModel;
 import com.google.android.gms.common.api.Status;
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.libraries.places.api.Places;
 import com.google.android.libraries.places.api.net.PlacesClient;
 import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
@@ -94,6 +98,7 @@ public class PlaceInputFragment extends Fragment {
     private Double latitude;
     private Double longitude;
     private String holidayName;
+    private Place place;
 
     public PlaceInputFragment() {
         // Required empty public constructor
@@ -127,7 +132,7 @@ public class PlaceInputFragment extends Fragment {
             public void onChanged(@Nullable final List<Holiday> holidays) {
                 for (Holiday holiday : holidays) {
                     holidayNames.add(holiday.getName());
-                    Log.d(TAG, "onChanged: " +  holiday.getName());
+                    Log.d(TAG, "onChanged: " + holiday.getName());
                 }
                 adapter.notifyDataSetChanged();
 
@@ -144,7 +149,6 @@ public class PlaceInputFragment extends Fragment {
         currentLocationButton = v.findViewById(R.id.currentLocationButton);
         addImageButton = v.findViewById(R.id.addImageButton);
         imageView = v.findViewById(R.id.imageView);
-        spinner = v.findViewById(R.id.spinner);
 
         FloatingActionButton fab = getActivity().findViewById(R.id.fab);
         fab.setImageResource(R.drawable.ic_save_black_24dp);
@@ -158,7 +162,7 @@ public class PlaceInputFragment extends Fragment {
                     } else if (TextUtils.isEmpty(dateText.getText())) {
                         Snackbar.make(view, "You need to enter a date", Snackbar.LENGTH_LONG)
                                 .setAction("Action ", null).show();
-                    } else if (selectedPlace == null || selectedPlace == ""){
+                    } else if (selectedPlace == null || selectedPlace == "") {
                         Snackbar.make(view, "You need to enter a location", Snackbar.LENGTH_LONG)
                                 .setAction("Action ", null).show();
                     } else {
@@ -169,6 +173,7 @@ public class PlaceInputFragment extends Fragment {
                         p.setPlaceHoliday(spinner.getSelectedItem().toString());
                         latitude = latLng.latitude;
                         longitude = latLng.longitude;
+                        Log.d(TAG, "onViewCreated: " + latitude + " : " + longitude);
                         p.setLatitude(latitude);
                         p.setLongitude(longitude);
                         if (selectedImageUri != null) {
@@ -284,17 +289,19 @@ public class PlaceInputFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         if (getArguments() != null) {
-            placeEditID = (int) getArguments().getLong("ID");
-            mEditPlaceView.setText(getArguments().getString("Name"));
-            placeDesc.setText(getArguments().getString("Memory"));
-            selectedPlace = getArguments().getString("Location");
-            dateText.setText(getArguments().getString("Date"));
-//            spinner.setSelection(1);
-            selectedImageUri = Uri.parse(getArguments().getString("Image"));
+            PlaceInputFragmentArgs args = PlaceInputFragmentArgs.fromBundle(getArguments());
+            place = args.getPlace();
+            placeEditID = place.get_id();
+            mEditPlaceView.setText(place.getName());
+            placeDesc.setText(place.getPlaceMemory());
+            selectedPlace = place.getLocation();
+            dateText.setText(place.getDate());
+            selectedImageUri = Uri.parse(place.getImage());
             Picasso.with(getContext()).load(selectedImageUri).into(imageView);
-            latitude = getArguments().getDouble("Latitude");
-            longitude = getArguments().getDouble("Longitude");
+            latitude = place.getLatitude();
+            longitude = place.getLongitude();
             latLng = new LatLng(latitude, longitude);
+            Log.d(TAG, "onViewCreated: " + latitude + " : " + longitude);
             editPlace = true;
         }
 
@@ -389,6 +396,9 @@ public class PlaceInputFragment extends Fragment {
                 for (Address adr : addresses) {
                     if (adr.getSubLocality() != null && adr.getSubLocality().length() > 0) {
                         cityName = adr.getSubLocality() + ", " + adr.getCountryName();
+                        break;
+                    } else if (adr.getLocality() != null && adr.getLocality().length() > 0) {
+                        cityName = adr.getLocality() + ", " + adr.getCountryName();
                         break;
                     }
                 }
