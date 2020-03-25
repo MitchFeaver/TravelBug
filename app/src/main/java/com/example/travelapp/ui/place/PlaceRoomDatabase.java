@@ -70,11 +70,13 @@ public abstract class PlaceRoomDatabase extends RoomDatabase {
             if (mDao.getAnyPlace().length < 1) {
                 for (int i = 0; i <= places.length - 1; i++) {
                     Place place = new Place(places[i]);
-                    place.setLocation("London Eye");
-                    place.setPlaceMemory("This is a sample memory");
+                    place.setLocation("Aston University");
+                    place.setPlaceMemory("Aston University has a green campus");
                     place.setDate("1/1/19");
                     place.setPlaceHoliday("SampleHoliday1");
                     place.setImage("");
+                    place.setLatitude(52.48685839999999);
+                    place.setLongitude(-1.8882174);
                     mDao.insert(place);
                 }
             }

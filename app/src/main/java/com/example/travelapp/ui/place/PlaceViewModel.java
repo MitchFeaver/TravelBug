@@ -25,7 +25,7 @@ public class PlaceViewModel extends AndroidViewModel {
         mAllPlaces = mRepository.getAllPlaces();
     }
 
-    LiveData<List<Place>> getAllPlaces() { return mAllPlaces; }
+    public LiveData<List<Place>> getAllPlaces() { return mAllPlaces; }
 
     public void insert(Place place) { mRepository.insert(place); }
 

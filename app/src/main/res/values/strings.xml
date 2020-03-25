@@ -41,4 +41,5 @@
     <string name="Enter_address">Enter Address, City or Post Code</string>
     <string name="clear_all_photos">Clear all photos</string>
     <string name="clear_all_places">Clear all places</string>
+    <string name="show_visited_places">Show Visited Places</string>
 </resources>

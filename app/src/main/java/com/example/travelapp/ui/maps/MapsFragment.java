@@ -3,46 +3,37 @@ package com.example.travelapp.ui.maps;
 import android.Manifest;
 import android.app.Dialog;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.EditorInfo;
-import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.SearchView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.core.app.ActivityCompat;
-import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
 import com.example.travelapp.R;
+import com.example.travelapp.ui.place.PlaceViewModel;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
@@ -82,6 +73,10 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
     private String[] mLikelyPlaceNames;
     private List[] mLikelyPlaceAttributions;
     private LatLng[] mLikelyPlaceLatLngs;
+    private Boolean showCurrentPlace = false;
+    private PlaceViewModel placeViewModel;
+    private List<String> placeLocations;
+    private List<LatLng> placeLatLng;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -95,8 +90,27 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
             public void onClick(View view) {
                 if (view != null) {
                     if (view.getId() == R.id.fab) {
-                        getDeviceLocation();
+                        if (!mLocationPermissionGranted){
+                            requestLocationPermission();
+                        }
+                        if (mLocationPermissionGranted) {
+                            getDeviceLocation();
+                        }
                     }
+                }
+            }
+        });
+
+        placeLocations = new ArrayList<>();
+        placeLatLng = new ArrayList<>();
+        placeViewModel = ViewModelProviders.of(this).get(PlaceViewModel.class);
+        placeViewModel.getAllPlaces().observe(getViewLifecycleOwner(), new Observer<List<com.example.travelapp.ui.place.Place>>() {
+            @Override
+            public void onChanged(List<com.example.travelapp.ui.place.Place> places) {
+                for (com.example.travelapp.ui.place.Place place : places) {
+                    Log.d(TAG, "onChanged: " + place.getLocation());
+                    placeLocations.add(place.getLocation());
+                    placeLatLng.add(new LatLng(place.getLatitude(), place.getLongitude()));
                 }
             }
         });
@@ -111,17 +125,37 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == R.id.action_places) {
-            showCurrentPlace();
-            return true;
+        int id = item.getItemId();
+        switch (id) {
+            case R.id.action_places:
+                showCurrentPlace();
+                return true;
+            case R.id.action_show_all_places:
+                showAllVisitedPlaces();
+                return true;
         }
         return super.onOptionsItemSelected(item);
     }
 
+    private void showAllVisitedPlaces() {
+        Log.d(TAG, "showAllVisitedPlaces: enter");
+        for (int i = 0; i < placeLocations.size(); i++){
+            Log.d(TAG, "showAllVisitedPlaces: for loop");
+            mMap.addMarker(new MarkerOptions()
+                    .title(placeLocations.get(i))
+                    .position(placeLatLng.get(i)));
+        }
+    }
 
     private void showCurrentPlace() {
+        showCurrentPlace = false;
         if (mMap == null) {
-            return;
+            if (!mLocationPermissionGranted){
+                Log.d(TAG, "showCurrentPlace: mLocationPermissionGranted False");
+                Log.d(TAG, "showCurrentPlace: showCurrentPlace true");
+                showCurrentPlace = true;
+            }
+            requestLocationPermission();
         }
 
         if (mLocationPermissionGranted) {
@@ -183,16 +217,6 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
                 }
             });
         } else {
-            // The user has not granted permission.
-            Log.i(TAG, "The user did not grant location permission.");
-            LatLng latLng = new LatLng(52.4869, 1.8882);
-            // Add a default marker, because the user hasn't selected a place.
-            mMap.addMarker(new MarkerOptions()
-                    .title("blah")
-                    .position(latLng)
-                    .snippet("blah2"));
-
-            // Prompt the user for permission.
             requestLocationPermission();
         }
     }
@@ -232,6 +256,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.menu_get_places, menu);
+        inflater.inflate(R.menu.menu_show_all_places, menu);
     }
 
     @Override
@@ -323,6 +348,10 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
                     Log.d(TAG, "onRequestPermissionsResult: pass");
                     mLocationPermissionGranted = true;
                     initMap();
+                    if (showCurrentPlace)
+                    {
+                        showCurrentPlace();
+                    }
                 }
             }
         }

@@ -8,6 +8,8 @@ import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
+import com.google.android.gms.maps.model.LatLng;
+
 import java.io.Serializable;
 
 @Entity( tableName = "place_table")
@@ -40,6 +42,14 @@ public class Place implements Serializable {
     @NonNull
     @ColumnInfo(name = " IMAGE ")
     private String image;
+
+    @NonNull
+    @ColumnInfo(name = " LATITUDE ")
+    private Double longitude;
+
+    @NonNull
+    @ColumnInfo(name = " LONGITUDE ")
+    private Double latitude;
 
     public Place(@NonNull String name) {
         this.name = name;
@@ -100,6 +110,22 @@ public class Place implements Serializable {
     @NonNull
     public String getPlaceHoliday() {
         return placeHoliday;
+    }
+
+    public void setLatitude(Double latitude) {
+        this.latitude = latitude;
+    }
+
+    public Double getLatitude(){
+        return latitude;
+    }
+
+    public void setLongitude(Double longitude) {
+        this.longitude = longitude;
+    }
+
+    public Double getLongitude(){
+        return longitude;
     }
 }
 

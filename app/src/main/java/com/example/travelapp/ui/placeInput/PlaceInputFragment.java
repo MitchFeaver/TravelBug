@@ -3,20 +3,15 @@ package com.example.travelapp.ui.placeInput;
 
 import android.Manifest;
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationManager;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -24,12 +19,11 @@ import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
-import androidx.navigation.NavController;
 import androidx.navigation.NavDirections;
 import androidx.navigation.Navigation;
 
-import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -52,23 +46,29 @@ import com.example.travelapp.ui.holiday.Holiday;
 import com.example.travelapp.ui.holiday.HolidayViewModel;
 import com.example.travelapp.ui.place.Place;
 import com.example.travelapp.ui.place.PlaceViewModel;
-import com.example.travelapp.ui.placeInput.PlaceInputFragmentDirections;
+import com.google.android.gms.common.api.Status;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.libraries.places.api.Places;
+import com.google.android.libraries.places.api.net.PlacesClient;
+import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
+import com.google.android.libraries.places.widget.listener.PlaceSelectionListener;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.squareup.picasso.Picasso;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
-
-import static android.content.ContentValues.TAG;
 
 public class PlaceInputFragment extends Fragment {
 
     private static final int STORAGE_PERMISSION_CODE = 1;
     private static final int LOCATION_PERMISSION_CODE = 2;
     private static final int IMAGE_REQUEST_CODE = 3;
+    private static final String TAG = "PlaceInputFragment";
 
     private PlaceViewModel mPlaceViewModel;
     private EditText mEditPlaceView;
@@ -77,14 +77,22 @@ public class PlaceInputFragment extends Fragment {
     private Button addImageButton;
     private TextView dateText;
     private TextView placeDesc;
-    private TextView locationText;
+    private EditText locationText;
     private Boolean editPlace = false;
     private int placeEditID;
     private ImageView imageView;
     private Uri selectedImageUri;
-    private TextView placeHoliday;
-
-    DatePickerDialog picker;
+    private DatePickerDialog picker;
+    private AutocompleteSupportFragment autocompleteFragment;
+    private PlacesClient placesClient;
+    private String selectedPlace;
+    private LatLng latLng;
+    private HolidayViewModel holidayViewModel;
+    private List<String> holidayNames;
+    private Spinner spinner;
+    private ArrayAdapter<String> adapter;
+    private Double latitude;
+    private Double longitude;
 
     public PlaceInputFragment() {
         // Required empty public constructor
@@ -99,14 +107,32 @@ public class PlaceInputFragment extends Fragment {
         mEditPlaceView = v.findViewById(R.id.placeName);
         mPlaceViewModel = ViewModelProviders.of(this).get(PlaceViewModel.class);
 
+        holidayNames = new ArrayList<>();
+        spinner = v.findViewById(R.id.spinner);
+        adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, holidayNames);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner.setAdapter(adapter);
+        Log.d(TAG, "onCreateView: Spinner adapter set.");
+
+        holidayViewModel = ViewModelProviders.of(this).get(HolidayViewModel.class);
+        holidayViewModel.getAllHolidays().observe(this, new Observer<List<Holiday>>() {
+            @Override
+            public void onChanged(@Nullable final List<Holiday> holidays) {
+                for (Holiday holiday : holidays) {
+                    holidayNames.add(holiday.getName());
+                    Log.d(TAG, "onChanged: " +  holiday.getName());
+                }
+                adapter.notifyDataSetChanged();
+            }
+        });
+
         dateButton = v.findViewById(R.id.dateButton);
         dateText = v.findViewById(R.id.dateText);
         placeDesc = v.findViewById(R.id.notesText);
-        locationText = v.findViewById(R.id.location);
         currentLocationButton = v.findViewById(R.id.currentLocationButton);
         addImageButton = v.findViewById(R.id.addImageButton);
         imageView = v.findViewById(R.id.imageView);
-        placeHoliday = v.findViewById(R.id.placeHoliday);
+        spinner = v.findViewById(R.id.spinner);
 
         FloatingActionButton fab = getActivity().findViewById(R.id.fab);
         fab.setImageResource(R.drawable.ic_save_black_24dp);
@@ -120,23 +146,30 @@ public class PlaceInputFragment extends Fragment {
                     } else if (TextUtils.isEmpty(dateText.getText())) {
                         Snackbar.make(view, "You need to enter a date", Snackbar.LENGTH_LONG)
                                 .setAction("Action ", null).show();
+                    } else if (selectedPlace == null || selectedPlace == ""){
+                        Snackbar.make(view, "You need to enter a location", Snackbar.LENGTH_LONG)
+                                .setAction("Action ", null).show();
                     } else {
-                        Place h = new Place(mEditPlaceView.getText().toString());
-                        h.setPlaceMemory(placeDesc.getText().toString());
-                        h.setLocation(locationText.getText().toString());
-                        h.setDate(dateText.getText().toString());
-                        h.setPlaceHoliday(placeHoliday.getText().toString());
+                        Place p = new Place(mEditPlaceView.getText().toString());
+                        p.setPlaceMemory(placeDesc.getText().toString());
+                        p.setLocation(selectedPlace);
+                        p.setDate(dateText.getText().toString());
+                        p.setPlaceHoliday(spinner.getSelectedItem().toString());
+                        latitude = latLng.latitude;
+                        longitude = latLng.longitude;
+                        p.setLatitude(latitude);
+                        p.setLongitude(longitude);
                         if (selectedImageUri != null) {
-                            h.setImage(selectedImageUri.toString());
+                            p.setImage(selectedImageUri.toString());
                         } else {
-                            h.setImage("");
+                            p.setImage("");
                         }
 
                         if (editPlace) {
-                            h.set_id(placeEditID);
-                            mPlaceViewModel.update(h);
+                            p.set_id(placeEditID);
+                            mPlaceViewModel.update(p);
                         } else {
-                            mPlaceViewModel.insert(h);
+                            mPlaceViewModel.insert(p);
                         }
                         NavDirections action =
                                 PlaceInputFragmentDirections.actionPlaceInputToNavPlace();
@@ -175,9 +208,9 @@ public class PlaceInputFragment extends Fragment {
                     startActivityForResult(intent, IMAGE_REQUEST_CODE);
                 } else {
                     requestStoragePermission();
-                    }
                 }
-            });
+            }
+        });
 
         currentLocationButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -186,8 +219,10 @@ public class PlaceInputFragment extends Fragment {
                     LocationManager locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
                     Location location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
                     try {
-                        String city = hereLocation(location.getLatitude(), location.getLongitude());
-                        locationText.setText(city);
+                        selectedPlace = hereLocation(location.getLatitude(), location.getLongitude());
+                        latLng = new LatLng(location.getLatitude(), location.getLongitude());
+                        locationText.setText(selectedPlace);
+                        Log.d(TAG, "CurrentLocationButton" + selectedPlace);
                     } catch (Exception e) {
                         e.printStackTrace();
                         Toast.makeText(getContext(), "Not Found", Toast.LENGTH_SHORT).show();
@@ -222,7 +257,7 @@ public class PlaceInputFragment extends Fragment {
         return super.onOptionsItemSelected(item);
     }
 
-    public void sharePlace(){
+    public void sharePlace() {
         Intent shareIntent = new Intent();
         shareIntent.setAction(Intent.ACTION_SEND);
         shareIntent.putExtra(Intent.EXTRA_TEXT, "Check out this place: " + mEditPlaceView.getText().toString()
@@ -240,14 +275,46 @@ public class PlaceInputFragment extends Fragment {
             placeEditID = (int) getArguments().getLong("ID");
             mEditPlaceView.setText(getArguments().getString("Name"));
             placeDesc.setText(getArguments().getString("Memory"));
-            locationText.setText(getArguments().getString("Location"));
+            selectedPlace = getArguments().getString("Location");
             dateText.setText(getArguments().getString("Date"));
-            placeHoliday.setText(getArguments().getString("Holiday"));
-            String stringUri = getArguments().getString("Image");
-            selectedImageUri = Uri.parse(stringUri);
+//            spinner.setSelection(1);
+            selectedImageUri = Uri.parse(getArguments().getString("Image"));
             Picasso.with(getContext()).load(selectedImageUri).into(imageView);
+            latitude = getArguments().getDouble("Latitude");
+            longitude = getArguments().getDouble("Longitude");
+            latLng = new LatLng(latitude, longitude);
             editPlace = true;
         }
+
+        Places.initialize(getContext(), "AIzaSyBH41wZLc_0fN1BdxX_uCa4ION1gS8Uf6g");
+        placesClient = Places.createClient(getContext());
+        autocompleteFragment = (AutocompleteSupportFragment)
+                getChildFragmentManager().findFragmentById(R.id.locationText);
+
+        autocompleteFragment.setPlaceFields(Arrays.asList(
+                com.google.android.libraries.places.api.model.Place.Field.NAME,
+                com.google.android.libraries.places.api.model.Place.Field.LAT_LNG
+        ));
+
+        locationText = autocompleteFragment.getView().findViewById(R.id.places_autocomplete_search_input);
+        locationText.setTextSize(16.0f);
+        locationText.setText(selectedPlace);
+
+        // Set up a PlaceSelectionListener to handle the response.
+        autocompleteFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
+            @Override
+            public void onPlaceSelected(com.google.android.libraries.places.api.model.Place place) {
+                selectedPlace = place.getName();
+                latLng = place.getLatLng();
+                Log.d(TAG, "onPlaceSelected: " + selectedPlace);
+                locationText.setText(selectedPlace);
+            }
+
+            @Override
+            public void onError(@NonNull Status status) {
+
+            }
+        });
     }
 
     private void requestStoragePermission() {
@@ -282,9 +349,10 @@ public class PlaceInputFragment extends Fragment {
                     Location location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
                     Log.d(TAG, "onClick: location2");
                     try {
-                        String city = hereLocation(location.getLatitude(), location.getLongitude());
-                        locationText.setText(city);
-                        Log.d(TAG, "onClick: setText2");
+                        selectedPlace = hereLocation(location.getLatitude(), location.getLongitude());
+                        latLng = new LatLng(location.getLatitude(), location.getLongitude());
+                        locationText.setText(selectedPlace);
+                        Log.d(TAG, "onClick: setText2" + selectedPlace);
                     } catch (Exception e) {
                         e.printStackTrace();
                         Toast.makeText(getContext(), "Not Found", Toast.LENGTH_SHORT).show();
@@ -300,15 +368,15 @@ public class PlaceInputFragment extends Fragment {
 
     private String hereLocation(double lat, double lon) {
         String cityName = "";
-
+        Log.d(TAG, "hereLocation: enter");
         Geocoder geocoder = new Geocoder(getContext(), Locale.getDefault());
         List<Address> addresses;
         try {
-            addresses = geocoder.getFromLocation(lat, lon, 10);
+            addresses = geocoder.getFromLocation(lat, lon, 5);
             if (addresses.size() > 0) {
                 for (Address adr : addresses) {
-                    if (adr.getLocality() != null && adr.getLocality().length() > 0) {
-                        cityName = adr.getLocality();
+                    if (adr.getSubLocality() != null && adr.getSubLocality().length() > 0) {
+                        cityName = adr.getSubLocality() + ", " + adr.getCountryName();
                         break;
                     }
                 }
@@ -316,6 +384,7 @@ public class PlaceInputFragment extends Fragment {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        Log.d(TAG, "hereLocation: " + cityName);
         return cityName;
     }
 }

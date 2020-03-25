@@ -51,6 +51,13 @@ public class HolidayInputFragment extends Fragment {
     private Boolean editHoliday = false;
     private int holidayEditID;
 
+    private int startDay;
+    private int startMonth;
+    private int startYear;
+    private int endDay;
+    private int endMonth;
+    private int endYear;
+
     DatePickerDialog picker;
 
 
@@ -72,7 +79,7 @@ public class HolidayInputFragment extends Fragment {
         endDateButton = v.findViewById(R.id.endDateButton);
         endDateText = v.findViewById(R.id.endDateText);
         holidayDesc = v.findViewById(R.id.notesText);
-        travelBuddy = v.findViewById(R.id.location);
+        travelBuddy = v.findViewById(R.id.locationText);
 
         FloatingActionButton fab = getActivity().findViewById(R.id.fab);
         fab.setImageResource (R.drawable.ic_save_black_24dp);
@@ -113,17 +120,18 @@ public class HolidayInputFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 final Calendar calendar = Calendar.getInstance();
-                int day = calendar.get(Calendar.DAY_OF_MONTH);
-                int month = calendar.get(Calendar.MONTH);
-                int year = calendar.get(Calendar.YEAR);
+                startDay = calendar.get(Calendar.DAY_OF_MONTH);
+                startMonth = calendar.get(Calendar.MONTH);
+                startYear = calendar.get(Calendar.YEAR);
 
                 picker = new DatePickerDialog(getContext(),
                         new DatePickerDialog.OnDateSetListener() {
                             @Override
                             public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                                // create date variables to make sure end date is after start date.
                                 startDateText.setText(dayOfMonth + "/" + (monthOfYear + 1) + "/" + year);
                             }
-                        }, year, month, day);
+                        }, startYear, startMonth, startDay);
                 picker.show();
             }
         });
@@ -132,17 +140,18 @@ public class HolidayInputFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 final Calendar calendar = Calendar.getInstance();
-                int day = calendar.get(Calendar.DAY_OF_MONTH);
-                int month = calendar.get(Calendar.MONTH);
-                int year = calendar.get(Calendar.YEAR);
+                endDay = calendar.get(Calendar.DAY_OF_MONTH);
+                endMonth = calendar.get(Calendar.MONTH);
+                endYear = calendar.get(Calendar.YEAR);
 
                 picker = new DatePickerDialog(getContext(),
                         new DatePickerDialog.OnDateSetListener() {
                             @Override
                             public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                                // create date variables to make sure end date is after start date.
                                 endDateText.setText(dayOfMonth + "/" + (monthOfYear + 1) + "/" + year);
                             }
-                        }, year, month, day);
+                        }, endYear, endMonth, endDay);
                 picker.show();
             }
         });
