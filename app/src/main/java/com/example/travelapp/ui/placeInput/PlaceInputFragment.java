@@ -93,6 +93,7 @@ public class PlaceInputFragment extends Fragment {
     private ArrayAdapter<String> adapter;
     private Double latitude;
     private Double longitude;
+    private String holidayName;
 
     public PlaceInputFragment() {
         // Required empty public constructor
@@ -101,6 +102,12 @@ public class PlaceInputFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
+        if (getArguments() != null) {
+            holidayName = getArguments().getString("Holiday");
+        } else {
+            holidayName = null;
+        }
 
         // Inflate the layout for this fragment
         final View v = inflater.inflate(R.layout.fragment_place_input, container, false);
@@ -123,6 +130,11 @@ public class PlaceInputFragment extends Fragment {
                     Log.d(TAG, "onChanged: " +  holiday.getName());
                 }
                 adapter.notifyDataSetChanged();
+
+                if (holidayName != null) {
+                    int i = holidayNames.indexOf(holidayName);
+                    spinner.setSelection(i);
+                }
             }
         });
 
