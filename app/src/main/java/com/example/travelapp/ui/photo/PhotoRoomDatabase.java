@@ -72,6 +72,7 @@ public abstract class PhotoRoomDatabase extends RoomDatabase {
                     Photo photo = new Photo(photos[i]);
                     photo.setHolidayName("Barcelona");
                     photo.setPhotoURL("");
+                    photo.setPhotoLocation("Agonda");
                     mDao.insert(photo);
                 }
             }

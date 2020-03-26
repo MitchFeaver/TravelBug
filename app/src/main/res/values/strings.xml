@@ -42,4 +42,9 @@
     <string name="clear_all_photos">Clear all photos</string>
     <string name="clear_all_places">Clear all places</string>
     <string name="show_visited_places">Show Visited Places</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="your_photo">Your photo</string>
+    <string name="delete_photo">Delete Photo</string>
 </resources>

@@ -22,11 +22,26 @@
         android:inputType="textPersonName"
         tools:ignore="LabelFor" />
 
+    <fragment
+        android:id="@+id/photoLocationText"
+        android:name="com.google.android.libraries.places.widget.AutocompleteSupportFragment"
+        android:layout_width="317dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/spinnerPhoto"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginStart="25dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="25dp"
+        android:autofillHints=""
+        android:hint="@string/enter_location"
+        android:inputType="textPersonName" />
+
     <Button
         android:id="@+id/chosePhotoButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/spinnerPhoto"
+        android:layout_below="@+id/photoLocationText"
         android:layout_alignParentStart="true"
         android:layout_alignParentEnd="true"
         android:layout_centerHorizontal="true"

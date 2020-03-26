@@ -57,7 +57,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class MapsFragment extends Fragment implements OnMapReadyCallback, GoogleMap.InfoWindowAdapter {
+public class MapsFragment extends Fragment implements OnMapReadyCallback {
 
     private static final int M_MAX_ENTRIES = 5;
     private MapsViewModel mapsViewModel;
@@ -80,9 +80,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, Google
     private PlaceViewModel placeViewModel;
     private List<String> placeLocations;
     private List<LatLng> placeLatLng;
-    private List<String> placeMemories;
-    private List<Place> allPlaces;
-    private final View markerItemView;
+    private List<String> placeDate;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -109,7 +107,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, Google
 
         placeLocations = new ArrayList<>();
         placeLatLng = new ArrayList<>();
-        placeMemories = new ArrayList<>();
+        placeDate = new ArrayList<>();
         placeViewModel = ViewModelProviders.of(this).get(PlaceViewModel.class);
         placeViewModel.getAllPlaces().observe(getViewLifecycleOwner(), new Observer<List<com.example.travelapp.ui.place.Place>>() {
             @Override
@@ -117,7 +115,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, Google
                 for (com.example.travelapp.ui.place.Place place : places) {
                     Log.d(TAG, "onChanged: " + place.getLocation());
                     placeLocations.add(place.getLocation());
-                    placeMemories.add(place.getPlaceMemory());
+                    placeDate.add(place.getDate());
                     placeLatLng.add(new LatLng(place.getLatitude(), place.getLongitude()));
                 }
             }
@@ -151,7 +149,8 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, Google
             Log.d(TAG, "showAllVisitedPlaces: for loop");
             mMap.addMarker(new MarkerOptions()
                     .title(placeLocations.get(i))
-                    .position(placeLatLng.get(i)));
+                    .position(placeLatLng.get(i))
+                    .snippet("Date Visited: " + placeDate.get(i)));
         }
     }
 

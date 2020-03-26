@@ -20,7 +20,7 @@
         android:inputType="textPersonName" />
 
     <fragment
-        android:id="@+id/locationText"
+        android:id="@+id/photoLocationText"
         android:name="com.google.android.libraries.places.widget.AutocompleteSupportFragment"
         android:layout_width="317dp"
         android:layout_height="wrap_content"
@@ -36,7 +36,7 @@
         android:id="@+id/dateButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/locationText"
+        android:layout_below="@+id/photoLocationText"
         android:layout_alignParentEnd="true"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="8dp"
@@ -60,14 +60,14 @@
         android:id="@+id/currentLocationButton"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_alignTop="@+id/locationText"
-        android:layout_alignBottom="@+id/locationText"
+        android:layout_alignTop="@+id/photoLocationText"
+        android:layout_alignBottom="@+id/photoLocationText"
         android:layout_alignParentEnd="true"
         android:layout_marginStart="6dp"
         android:layout_marginTop="0dp"
         android:layout_marginEnd="25dp"
         android:layout_marginBottom="0dp"
-        android:layout_toEndOf="@+id/locationText"
+        android:layout_toEndOf="@+id/photoLocationText"
         android:drawableTop="@drawable/ic_my_location_black_24dp" />
 
     <EditText

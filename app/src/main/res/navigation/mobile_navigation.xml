@@ -12,7 +12,9 @@
         tools:layout="@layout/fragment_home" >
         <action
             android:id="@+id/action_nav_home_to_holiday_input"
-            app:destination="@id/holiday_input" />
+            app:destination="@id/holiday_input"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim" />
     </fragment>
 
     <fragment
@@ -22,7 +24,9 @@
         tools:layout="@layout/fragment_holiday">
         <action
             android:id="@+id/action_nav_holiday_to_holidayInput"
-            app:destination="@id/holiday_input" />
+            app:destination="@id/holiday_input"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim" />
     </fragment>
 
     <fragment
@@ -32,7 +36,9 @@
         tools:layout="@layout/fragment_holiday">
         <action
             android:id="@+id/action_nav_photo_to_photo_input"
-            app:destination="@id/photo_input" />
+            app:destination="@id/photo_input"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim" />
     </fragment>
     <fragment
         android:id="@+id/nav_maps"
@@ -48,7 +54,9 @@
         tools:layout="@layout/fragment_holiday_input">
         <action
             android:id="@+id/action_holidayInput_to_nav_holiday"
-            app:destination="@id/nav_holiday" />
+            app:destination="@id/nav_holiday"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim" />
         <argument
             android:name="holiday"
             app:argType="com.example.travelapp.ui.holiday.Holiday"
@@ -62,7 +70,9 @@
         tools:layout="@layout/fragment_photo_input">
         <action
             android:id="@+id/action_photo_input_to_nav_photo"
-            app:destination="@id/nav_photo" />
+            app:destination="@id/nav_photo"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim" />
         <argument
             android:name="photo"
             app:argType="com.example.travelapp.ui.photo.Photo"
@@ -76,7 +86,9 @@
         tools:layout="@layout/fragment_place" >
         <action
             android:id="@+id/action_nav_place_to_placeInput"
-            app:destination="@id/place_input" />
+            app:destination="@id/place_input"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim" />
     </fragment>
 
     <fragment
@@ -86,7 +98,9 @@
         tools:layout="@layout/fragment_place_input" >
         <action
             android:id="@+id/action_place_input_to_nav_place"
-            app:destination="@id/nav_place" />
+            app:destination="@id/nav_place"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim" />
         <argument
             android:name="place"
             app:argType="com.example.travelapp.ui.place.Place"

@@ -26,6 +26,10 @@ public class Photo implements Serializable {
     @ColumnInfo (name = " PHOTOURL ")
     private String photoURL ;
 
+    @NonNull
+    @ColumnInfo (name = " PHOTOLOC ")
+    private String photoLocation ;
+
     public Photo (@NonNull String photoName) { this.photoName = photoName; }
 
     public void set_id (int id) {
@@ -56,5 +60,14 @@ public class Photo implements Serializable {
 
     public void setPhotoURL(String imageURL) {
         this.photoURL = imageURL;
+    }
+
+    @NonNull
+    public String getPhotoLocation() {
+        return photoLocation;
+    }
+
+    public void setPhotoLocation(@NonNull String photoLocation) {
+        this.photoLocation = photoLocation;
     }
 }

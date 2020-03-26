@@ -29,14 +29,12 @@ import android.widget.TextView;
 import com.example.travelapp.R;
 import com.example.travelapp.ui.holiday.Holiday;
 import com.example.travelapp.ui.holiday.HolidayViewModel;
-import com.example.travelapp.ui.placeInput.PlaceInputFragmentArgs;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
 
 import static android.content.ContentValues.TAG;
 
@@ -87,7 +85,7 @@ public class HolidayInputFragment extends Fragment {
         endDateButton = v.findViewById(R.id.endDateButton);
         endDateText = v.findViewById(R.id.endDateText);
         holidayDesc = v.findViewById(R.id.notesText);
-        travelBuddy = v.findViewById(R.id.locationText);
+        travelBuddy = v.findViewById(R.id.photoLocationText);
 
         FloatingActionButton fab = getActivity().findViewById(R.id.fab);
         fab.setImageResource (R.drawable.ic_save_black_24dp);

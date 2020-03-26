@@ -48,6 +48,11 @@ import com.example.travelapp.ui.holiday.HolidayViewModel;
 import com.example.travelapp.ui.holidayInput.HolidayInputFragmentDirections;
 import com.example.travelapp.ui.photo.Photo;
 import com.example.travelapp.ui.photo.PhotoViewModel;
+import com.google.android.gms.common.api.Status;
+import com.google.android.libraries.places.api.Places;
+import com.google.android.libraries.places.api.net.PlacesClient;
+import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
+import com.google.android.libraries.places.widget.listener.PlaceSelectionListener;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.squareup.picasso.Picasso;
@@ -56,6 +61,7 @@ import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -85,7 +91,11 @@ public class PhotoInputFragment extends Fragment {
     private List<String> holidayNames;
     private ArrayAdapter<String> adapter;
     private Spinner spinner;
-
+    private AutocompleteSupportFragment autocompleteFragment;
+    private PlacesClient placesClient;
+    private EditText photoLocationText;
+    private String selectedPlace;
+    private View v;
 
     public PhotoInputFragment() {
         // Required empty public constructor
@@ -95,8 +105,7 @@ public class PhotoInputFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        // Inflate the layout for this fragment
-        final View v = inflater.inflate(R.layout.fragment_photo_input, container, false);
+        v = inflater.inflate(R.layout.fragment_photo_input, container, false);
         mEditPhotoView = v.findViewById(R.id.photoName);
         mPhotoViewModel = ViewModelProviders.of(this).get(PhotoViewModel.class);
 
@@ -117,17 +126,21 @@ public class PhotoInputFragment extends Fragment {
             fab.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    Log.d(TAG, "onClick: " + photoLocationText.toString());
                     if (TextUtils.isEmpty(mEditPhotoView.getText())) {
                         Snackbar.make(view, "You need to enter a name", Snackbar.LENGTH_LONG)
+                                .setAction("Action ", null).show();
+                    } else if (selectedPlace == null || selectedPlace == ""){
+                        Snackbar.make(view, "Where was this photo taken?", Snackbar.LENGTH_LONG)
+                                .setAction("Action ", null).show();
+                    } else if (selectedImageUri == null || selectedImageUri.toString() == ""){
+                        Snackbar.make(view, "You haven't added a photo yet", Snackbar.LENGTH_LONG)
                                 .setAction("Action ", null).show();
                     } else {
                         Photo photo = new Photo(mEditPhotoView.getText().toString());
                         photo.setHolidayName(spinner.getSelectedItem().toString());
-                        if (selectedImageUri != null) {
-                            photo.setPhotoURL(selectedImageUri.toString());
-                        } else {
-                            photo.setPhotoURL("");
-                        }
+                        photo.setPhotoLocation(selectedPlace);
+                        photo.setPhotoURL(selectedImageUri.toString());
                         if (editPhoto) {
                             photo.set_id(photoEditID);
                             mPhotoViewModel.update(photo);
@@ -192,6 +205,7 @@ public class PhotoInputFragment extends Fragment {
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.menu_share, menu);
+        inflater.inflate(R.menu.menu_delete_photo, menu);
     }
 
     @Override
@@ -201,8 +215,18 @@ public class PhotoInputFragment extends Fragment {
             case R.id.action_share:
                 sharePhoto();
                 return true;
+            case R.id.action_delete:
+                deletePhoto();
+                return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void deletePhoto() {
+        mPhotoViewModel.deletePhoto(photo);
+        NavDirections action =
+                PhotoInputFragmentDirections.actionPhotoInputToNavPhoto();
+        Navigation.findNavController(v).navigate(action);
     }
 
     public void sharePhoto(){
@@ -230,6 +254,7 @@ public class PhotoInputFragment extends Fragment {
             photo = args.getPhoto();
             photoEditID = photo.get_id();
             mEditPhotoView.setText(photo.getPhotoName());
+            selectedPlace = photo.getPhotoLocation();
             selectedImageUri = Uri.parse(photo.getPhotoURL());
             imageViewGallery.setImageURI(selectedImageUri);
             editPhoto = true;
@@ -249,6 +274,35 @@ public class PhotoInputFragment extends Fragment {
                     int i = holidayNames.indexOf(holidayName);
                     spinner.setSelection(i);
                 }
+            }
+        });
+
+        Places.initialize(getContext(), "AIzaSyBH41wZLc_0fN1BdxX_uCa4ION1gS8Uf6g");
+        placesClient = Places.createClient(getContext());
+        autocompleteFragment = (AutocompleteSupportFragment)
+                getChildFragmentManager().findFragmentById(R.id.photoLocationText);
+
+        autocompleteFragment.setPlaceFields(Arrays.asList(
+                com.google.android.libraries.places.api.model.Place.Field.NAME,
+                com.google.android.libraries.places.api.model.Place.Field.LAT_LNG
+        ));
+
+        photoLocationText = autocompleteFragment.getView().findViewById(R.id.places_autocomplete_search_input);
+        photoLocationText.setTextSize(16.0f);
+        photoLocationText.setText(selectedPlace);
+
+        // Set up a PlaceSelectionListener to handle the response.
+        autocompleteFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
+            @Override
+            public void onPlaceSelected(com.google.android.libraries.places.api.model.Place place) {
+                selectedPlace = place.getName();
+                Log.d(TAG, "onPlaceSelected: " + selectedPlace);
+                photoLocationText.setText(selectedPlace);
+            }
+
+            @Override
+            public void onError(@NonNull Status status) {
+
             }
         });
     }

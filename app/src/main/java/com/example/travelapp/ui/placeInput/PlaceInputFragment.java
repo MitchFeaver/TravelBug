@@ -47,11 +47,7 @@ import com.example.travelapp.ui.holiday.HolidayViewModel;
 import com.example.travelapp.ui.place.Place;
 import com.example.travelapp.ui.place.PlaceViewModel;
 import com.google.android.gms.common.api.Status;
-import com.google.android.gms.location.FusedLocationProviderClient;
-import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.android.libraries.places.api.Places;
 import com.google.android.libraries.places.api.net.PlacesClient;
 import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
@@ -302,7 +298,7 @@ public class PlaceInputFragment extends Fragment {
         Places.initialize(getContext(), "AIzaSyBH41wZLc_0fN1BdxX_uCa4ION1gS8Uf6g");
         placesClient = Places.createClient(getContext());
         autocompleteFragment = (AutocompleteSupportFragment)
-                getChildFragmentManager().findFragmentById(R.id.locationText);
+                getChildFragmentManager().findFragmentById(R.id.photoLocationText);
 
         autocompleteFragment.setPlaceFields(Arrays.asList(
                 com.google.android.libraries.places.api.model.Place.Field.NAME,
