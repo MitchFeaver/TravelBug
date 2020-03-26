@@ -33,7 +33,10 @@ import com.example.travelapp.ui.placeInput.PlaceInputFragmentArgs;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 
 import static android.content.ContentValues.TAG;
 
@@ -52,6 +55,9 @@ public class HolidayInputFragment extends Fragment {
     private Boolean editHoliday = false;
     private int holidayEditID;
 
+    private String startDateString;
+    private String endDateString;
+
     private int startDay;
     private int startMonth;
     private int startYear;
@@ -59,7 +65,7 @@ public class HolidayInputFragment extends Fragment {
     private int endMonth;
     private int endYear;
     private Holiday holiday;
-
+    private Boolean endBeforeStart = false;
     DatePickerDialog picker;
 
 
@@ -89,12 +95,27 @@ public class HolidayInputFragment extends Fragment {
             fab.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    SimpleDateFormat dfDate = new SimpleDateFormat("MM/dd/yyyy");
+                    try {
+                        if (startDateString != null && endDateString != null) {
+                            if (dfDate.parse(endDateString).before(dfDate.parse(startDateString))) {
+                                endBeforeStart = true;
+                            } else {
+                                endBeforeStart = false;
+                            }
+                        }
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
                     if (TextUtils.isEmpty(mEditHolidayView.getText())) {
                         Snackbar.make(view, "You need to enter a name", Snackbar.LENGTH_LONG)
                                 .setAction("Action ", null).show();
-                    }else if (TextUtils.isEmpty(startDateText.getText()) ||
-                                    TextUtils.isEmpty(endDateText.getText())){
+                    } else if (TextUtils.isEmpty(startDateText.getText()) ||
+                            TextUtils.isEmpty(endDateText.getText())) {
                         Snackbar.make(view, "You need to enter both dates", Snackbar.LENGTH_LONG)
+                                .setAction("Action ", null).show();
+                    } else if (endBeforeStart) {
+                        Snackbar.make(view, "The start date needs to be before the end date", Snackbar.LENGTH_LONG)
                                 .setAction("Action ", null).show();
                     } else {
                         Log.d(TAG, "onClick: !editHoliday");
@@ -103,17 +124,20 @@ public class HolidayInputFragment extends Fragment {
                         h.setTravelBuddy(travelBuddy.getText().toString());
                         h.setStartDate(startDateText.getText().toString());
                         h.setEndDate(endDateText.getText().toString());
+                        h.setStartDateF(startDateString);
+                        h.setEndDateF(endDateString);
 
-                    if (editHoliday){
-                        h.set_id(holidayEditID);
-                        mHolidayViewModel.update(h);
-                    }else{
-                        mHolidayViewModel.insert(h);
+                        if (editHoliday) {
+                            h.set_id(holidayEditID);
+                            mHolidayViewModel.update(h);
+                        } else {
+                            mHolidayViewModel.insert(h);
+                        }
+                        NavDirections action =
+                                HolidayInputFragmentDirections.actionHolidayInputToNavHoliday();
+                        Navigation.findNavController(v).navigate(action);
                     }
-                NavDirections action =
-                    HolidayInputFragmentDirections.actionHolidayInputToNavHoliday();
-                Navigation.findNavController(v).navigate(action);
-                    }
+
                 }
             });
         }
@@ -132,12 +156,17 @@ public class HolidayInputFragment extends Fragment {
                             public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
                                 // create date variables to make sure end date is after start date.
                                 startDateText.setText(dayOfMonth + "/" + (monthOfYear + 1) + "/" + year);
+                                startDay = dayOfMonth;
+                                startMonth = (monthOfYear + 1);
+                                startYear = year;
+                                startDateString = ((monthOfYear+1) + "/" + dayOfMonth + "/" + year);
+                                Log.d(TAG, "onDateSet: " + startDateString);
                             }
                         }, startYear, startMonth, startDay);
                 picker.show();
             }
         });
-        
+
         endDateButton.setOnClickListener(new View.OnClickListener() {  // setting listener for user click event
             @Override
             public void onClick(View v) {
@@ -151,7 +180,12 @@ public class HolidayInputFragment extends Fragment {
                             @Override
                             public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
                                 // create date variables to make sure end date is after start date.
+                                endDay = dayOfMonth;
+                                endMonth = monthOfYear + 1;
+                                endYear = year;
                                 endDateText.setText(dayOfMonth + "/" + (monthOfYear + 1) + "/" + year);
+                                endDateString = ((monthOfYear+1) + "/" + dayOfMonth + "/" + year);
+                                Log.d(TAG, "onDateSet: " + endDateString);
                             }
                         }, endYear, endMonth, endDay);
                 picker.show();
@@ -198,13 +232,6 @@ public class HolidayInputFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         if(getArguments() != null) {
-//            navController = Navigation.findNavController(view);
-//            holidayEditID = (int) getArguments().getLong("ID");
-//            mEditHolidayView.setText(getArguments().getString("Name"));
-//            holidayDesc.setText(getArguments().getString("Memory"));
-//            travelBuddy.setText(getArguments().getString("TravelBuddy"));
-//            startDateText.setText(getArguments().getString("StartDate"));
-//            endDateText.setText(getArguments().getString("EndDate"));
             HolidayInputFragmentArgs args = HolidayInputFragmentArgs.fromBundle(getArguments());
             holiday = args.getHoliday();
             holidayEditID = holiday.get_id();
@@ -213,7 +240,10 @@ public class HolidayInputFragment extends Fragment {
             travelBuddy.setText(holiday.getTravelBuddy());
             startDateText.setText(holiday.getStartDate());
             endDateText.setText(holiday.getEndDate());
+            startDateString = holiday.getStartDateF();
+            endDateString = holiday.getEndDateF();
             editHoliday = true;
+
         }
     }
 }

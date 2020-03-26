@@ -71,6 +71,8 @@ public abstract class HolidayRoomDatabase extends RoomDatabase {
                     holiday.setHolidayMemory("This is a sample memory");
                     holiday.setStartDate("1/1/19");
                     holiday.setEndDate("2/2/19");
+                    holiday.setStartDateF("1/1/2019");
+                    holiday.setEndDateF("2/2/2019");
                     mDao.insert(holiday);
                 }
             }

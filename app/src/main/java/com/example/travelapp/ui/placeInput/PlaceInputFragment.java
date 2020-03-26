@@ -108,12 +108,6 @@ public class PlaceInputFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        if (getArguments() != null) {
-            holidayName = getArguments().getString("Holiday");
-        } else {
-            holidayName = null;
-        }
-
         // Inflate the layout for this fragment
         final View v = inflater.inflate(R.layout.fragment_place_input, container, false);
         mEditPlaceView = v.findViewById(R.id.placeName);
@@ -125,23 +119,6 @@ public class PlaceInputFragment extends Fragment {
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(adapter);
         Log.d(TAG, "onCreateView: Spinner adapter set.");
-
-        holidayViewModel = ViewModelProviders.of(this).get(HolidayViewModel.class);
-        holidayViewModel.getAllHolidays().observe(this, new Observer<List<Holiday>>() {
-            @Override
-            public void onChanged(@Nullable final List<Holiday> holidays) {
-                for (Holiday holiday : holidays) {
-                    holidayNames.add(holiday.getName());
-                    Log.d(TAG, "onChanged: " + holiday.getName());
-                }
-                adapter.notifyDataSetChanged();
-
-                if (holidayName != null) {
-                    int i = holidayNames.indexOf(holidayName);
-                    spinner.setSelection(i);
-                }
-            }
-        });
 
         dateButton = v.findViewById(R.id.dateButton);
         dateText = v.findViewById(R.id.dateText);
@@ -301,9 +278,26 @@ public class PlaceInputFragment extends Fragment {
             latitude = place.getLatitude();
             longitude = place.getLongitude();
             latLng = new LatLng(latitude, longitude);
-            Log.d(TAG, "onViewCreated: " + latitude + " : " + longitude);
             editPlace = true;
+            holidayName = place.getPlaceHoliday();
         }
+
+        holidayViewModel = ViewModelProviders.of(this).get(HolidayViewModel.class);
+        holidayViewModel.getAllHolidays().observe(this, new Observer<List<Holiday>>() {
+            @Override
+            public void onChanged(@Nullable final List<Holiday> holidays) {
+                for (Holiday holiday : holidays) {
+                    holidayNames.add(holiday.getName());
+                    Log.d(TAG, "onChanged: " + holiday.getName());
+                }
+                adapter.notifyDataSetChanged();
+
+                if (holidayName != null) {
+                    int i = holidayNames.indexOf(holidayName);
+                    spinner.setSelection(i);
+                }
+            }
+        });
 
         Places.initialize(getContext(), "AIzaSyBH41wZLc_0fN1BdxX_uCa4ION1gS8Uf6g");
         placesClient = Places.createClient(getContext());

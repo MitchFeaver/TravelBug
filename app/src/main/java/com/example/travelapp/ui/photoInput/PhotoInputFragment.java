@@ -74,7 +74,6 @@ public class PhotoInputFragment extends Fragment {
     private EditText mEditPhotoView;
     private Boolean editPhoto = false;
     private ImageView imageViewGallery;
-    private EditText photoHolidayName;
     private Button choosePhotoButton;
     private Button takePhotoButton;
     private int photoEditID;
@@ -96,19 +95,10 @@ public class PhotoInputFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        if (getArguments() != null) {
-            holidayName = getArguments().getString("Holiday");
-        } else {
-            holidayName = null;
-        }
-
         // Inflate the layout for this fragment
         final View v = inflater.inflate(R.layout.fragment_photo_input, container, false);
         mEditPhotoView = v.findViewById(R.id.photoName);
         mPhotoViewModel = ViewModelProviders.of(this).get(PhotoViewModel.class);
-        choosePhotoButton = v.findViewById(R.id.chosePhotoButton);
-        takePhotoButton = v.findViewById(R.id.takePhotoButton);
-        imageViewGallery = v.findViewById(R.id.imageViewGallery);
 
         holidayNames = new ArrayList<>();
         spinner = v.findViewById(R.id.spinnerPhoto);
@@ -117,21 +107,9 @@ public class PhotoInputFragment extends Fragment {
         spinner.setAdapter(adapter);
         Log.d(TAG, "onCreateView: Spinner adapter set.");
 
-        holidayViewModel = ViewModelProviders.of(this).get(HolidayViewModel.class);
-        holidayViewModel.getAllHolidays().observe(this, new Observer<List<Holiday>>() {
-            @Override
-            public void onChanged(@Nullable final List<Holiday> holidays) {
-                for (Holiday holiday : holidays) {
-                    holidayNames.add(holiday.getName());
-                    Log.d(TAG, "onChanged: " +  holiday.getName());
-                }
-                adapter.notifyDataSetChanged();
-                if (holidayName != null) {
-                    int i = holidayNames.indexOf(holidayName);
-                    spinner.setSelection(i);
-                }
-            }
-        });
+        choosePhotoButton = v.findViewById(R.id.chosePhotoButton);
+        takePhotoButton = v.findViewById(R.id.takePhotoButton);
+        imageViewGallery = v.findViewById(R.id.imageViewGallery);
 
         FloatingActionButton fab = getActivity().findViewById(R.id.fab);
         fab.setImageResource(R.drawable.ic_save_black_24dp);
@@ -144,7 +122,7 @@ public class PhotoInputFragment extends Fragment {
                                 .setAction("Action ", null).show();
                     } else {
                         Photo photo = new Photo(mEditPhotoView.getText().toString());
-                        photo.setHolidayName(photoHolidayName.getText().toString());
+                        photo.setHolidayName(spinner.getSelectedItem().toString());
                         if (selectedImageUri != null) {
                             photo.setPhotoURL(selectedImageUri.toString());
                         } else {
@@ -248,22 +226,31 @@ public class PhotoInputFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         if (getArguments() != null) {
-//            photoEditID = (int) getArguments().getLong("ID");
-//            mEditPhotoView.setText(getArguments().getString("Name"));
-//            photoHolidayName.setText(getArguments().getString("HolidayName"));
-//            String stringUri = getArguments().getString("PhotoURL");
-//            selectedImageUri = Uri.parse(stringUri);
-//            imageViewGallery.setImageURI(Uri.parse(stringUri));
-
             PhotoInputFragmentArgs args = PhotoInputFragmentArgs.fromBundle(getArguments());
             photo = args.getPhoto();
             photoEditID = photo.get_id();
             mEditPhotoView.setText(photo.getPhotoName());
-            photoHolidayName.setText(photo.getHolidayName());
             selectedImageUri = Uri.parse(photo.getPhotoURL());
             imageViewGallery.setImageURI(selectedImageUri);
             editPhoto = true;
+            holidayName = photo.getHolidayName();
         }
+
+        holidayViewModel = ViewModelProviders.of(this).get(HolidayViewModel.class);
+        holidayViewModel.getAllHolidays().observe(this, new Observer<List<Holiday>>() {
+            @Override
+            public void onChanged(@Nullable final List<Holiday> holidays) {
+                for (Holiday holiday : holidays) {
+                    holidayNames.add(holiday.getName());
+                    Log.d(TAG, "onChanged: " +  holiday.getName());
+                }
+                adapter.notifyDataSetChanged();
+                if (holidayName != null) {
+                    int i = holidayNames.indexOf(holidayName);
+                    spinner.setSelection(i);
+                }
+            }
+        });
     }
 
     private void requestStoragePermission() {

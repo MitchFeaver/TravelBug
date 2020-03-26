@@ -35,6 +35,13 @@ public class Holiday implements Serializable {
     @ColumnInfo(name = " ENDDATE ")
     private String endDate;
 
+    @NonNull
+    @ColumnInfo(name = " STARTDATEF ")
+    private String startDateF;
+
+    @NonNull
+    @ColumnInfo(name = " ENDDATEF ")
+    private String endDateF;
 
     public Holiday (@NonNull String name) { this.name = name; }
 
@@ -72,4 +79,22 @@ public class Holiday implements Serializable {
 
     public String getEndDate(){ return endDate; }
 
+
+    @NonNull
+    public String getStartDateF() {
+        return startDateF;
+    }
+
+    public void setStartDateF(@NonNull String startDateF) {
+        this.startDateF = startDateF;
+    }
+
+    @NonNull
+    public String getEndDateF() {
+        return endDateF;
+    }
+
+    public void setEndDateF(@NonNull String endDateF) {
+        this.endDateF = endDateF;
+    }
 }

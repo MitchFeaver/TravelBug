@@ -15,6 +15,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
@@ -37,6 +38,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -55,7 +57,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class MapsFragment extends Fragment implements OnMapReadyCallback {
+public class MapsFragment extends Fragment implements OnMapReadyCallback, GoogleMap.InfoWindowAdapter {
 
     private static final int M_MAX_ENTRIES = 5;
     private MapsViewModel mapsViewModel;
@@ -63,6 +65,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
     private static final String TAG = "MapsFragment";
     private static final int ERROR_DIALOG_REQUEST = 9001;
     private static final int LOCATION_PERMISSION_CODE = 2;
+
 
     private Boolean mLocationPermissionGranted = false;
     private GoogleMap mMap;
@@ -77,6 +80,9 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
     private PlaceViewModel placeViewModel;
     private List<String> placeLocations;
     private List<LatLng> placeLatLng;
+    private List<String> placeMemories;
+    private List<Place> allPlaces;
+    private final View markerItemView;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -103,6 +109,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
 
         placeLocations = new ArrayList<>();
         placeLatLng = new ArrayList<>();
+        placeMemories = new ArrayList<>();
         placeViewModel = ViewModelProviders.of(this).get(PlaceViewModel.class);
         placeViewModel.getAllPlaces().observe(getViewLifecycleOwner(), new Observer<List<com.example.travelapp.ui.place.Place>>() {
             @Override
@@ -110,6 +117,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
                 for (com.example.travelapp.ui.place.Place place : places) {
                     Log.d(TAG, "onChanged: " + place.getLocation());
                     placeLocations.add(place.getLocation());
+                    placeMemories.add(place.getPlaceMemory());
                     placeLatLng.add(new LatLng(place.getLatitude(), place.getLongitude()));
                 }
             }
@@ -408,5 +416,6 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
     private void moveCamera(LatLng latLng, float zoom){
         Log.d(TAG, "moveCamera: moving the camera to: lat: " + latLng.latitude + ", lng: " + latLng.longitude );
         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 10));
+
     }
 }
